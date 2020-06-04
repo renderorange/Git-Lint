@@ -1,0 +1,32 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+use FindBin qw($Bin);
+use lib "$FindBin::Bin/lib";
+
+use Git::Lint;
+
+my @input = <>;
+
+my $lint = Git::Lint->new();
+$lint->run( \@input );
+
+if ( keys %{ $lint->{issues} } ) {
+    print STDERR "the following issues were found:\n\n";
+
+    foreach my $filename ( keys %{ $lint->{issues} } ) {
+        print STDERR $filename . "\n";
+
+        foreach my $issue ( @{ $lint->{issues}{$filename} } ) {
+            print STDERR $issue . "\n";
+        }
+
+        print STDERR "\n";
+    }
+
+    exit 1;
+}
+
+exit 0;
