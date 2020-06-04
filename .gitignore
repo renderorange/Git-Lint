@@ -1,0 +1,7 @@
+scratch
+testing
+*.swp
+*.back
+backup/
+cover_db/
+tmp/
