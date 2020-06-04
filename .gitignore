@@ -2,6 +2,7 @@ scratch
 testing
 *.swp
 *.back
+notes/
 backup/
 cover_db/
 tmp/
