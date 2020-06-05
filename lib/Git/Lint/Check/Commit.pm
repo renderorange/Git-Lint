@@ -5,7 +5,49 @@ use warnings;
 
 use parent 'Git::Lint::Check';
 
+use Try::Tiny;
+use Git::Repository ();
+
 our $VERSION = '0.001';
+
+sub diff {
+    my $self = shift;
+
+    my @git_head_cmd = (qw{ rev-parse --verify HEAD });
+
+    my $against;
+    my $head = try {
+        return Git::Repository->run(@git_head_cmd);
+    }
+    catch {
+        chomp( my $exception = $_ );
+        die "gitlint: $exception\n";
+    };
+
+    if ($head) {
+        $against = 'HEAD';
+    }
+    else {
+        # Initial commit: diff against an empty tree object
+        $against = '4b825dc642cb6eb9a060e54bf8d69288fbee4904';
+    }
+
+    my @git_diff_index_cmd = ( qw{ diff-index -p -M --cached }, $against );
+
+    my @diff = try {
+        return Git::Repository->run(@git_diff_index_cmd);
+    }
+    catch {
+        chomp( my $exception = $_ );
+        die "gitlint: $exception\n";
+    };
+
+    unless (@diff) {
+        exit 0;
+    }
+
+    return \@diff;
+}
 
 sub report {
     my $self = shift;

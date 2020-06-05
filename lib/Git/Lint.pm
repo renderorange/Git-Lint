@@ -20,8 +20,7 @@ sub new {
 }
 
 sub run {
-    my $self  = shift;
-    my $input = shift;
+    my $self = shift;
 
     my @issues;
     foreach my $check ( $self->{_loader}->find_modules('Git::Lint::Check::Commit') ) {
@@ -29,6 +28,7 @@ sub run {
         my $plugin = $check->new();
 
         # ensure the plugins don't manipulate the original input
+        my $input = $check->diff();
         my @lines = @{$input};
         push @issues, $plugin->check( \@lines );
     }

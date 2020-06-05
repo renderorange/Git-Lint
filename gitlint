@@ -8,10 +8,8 @@ use lib "$FindBin::RealBin/lib";
 
 use Git::Lint;
 
-my @input = <>;
-
 my $lint = Git::Lint->new();
-$lint->run( \@input );
+$lint->run();
 
 if ( keys %{ $lint->{issues} } ) {
     print STDERR "the following issues were found:\n\n";
