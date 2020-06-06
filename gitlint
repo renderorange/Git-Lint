@@ -6,7 +6,20 @@ use warnings;
 use FindBin;
 use lib "$FindBin::RealBin/lib";
 
+use Getopt::Long ();
+use Pod::Usage   ();
 use Git::Lint;
+
+my $VERSION = '0.001';
+
+my %opt;
+Getopt::Long::GetOptions(
+    \%opt,
+    'version' => sub { print "gitlint version $VERSION\n"; exit 0 },
+    'help',
+) or Pod::Usage::pod2usage( -exitval => 1 );
+
+Pod::Usage::pod2usage( -exitval => 0 ) if ( $opt{help} );
 
 my $lint = Git::Lint->new();
 $lint->run();
@@ -28,3 +41,42 @@ if ( keys %{ $lint->{issues} } ) {
 }
 
 exit 0;
+
+__END__
+
+=pod
+
+=head1 NAME
+
+gitlint - linter for git
+
+=head1 SYNOPSIS
+
+ gitlint [--version]
+         [--help]
+
+=head1 DESCRIPTION
+
+C<gitlint> is a program to lint git commits.
+
+=head1 OPTIONS
+
+=over
+
+=item --version
+
+Print the version.
+
+=item --help
+
+Print the help menu.
+
+=back
+
+=head1 AUTHOR
+
+Blaine Motsinger C<blaine@renderorange.com>
+
+=head1 COPYRIGHT
+
+=cut
