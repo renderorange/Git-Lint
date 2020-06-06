@@ -1,7 +1,6 @@
 use strict;
 use warnings;
 
-use FindBin;
 use Test::More;
 
 unless ( $ENV{TEST_AUTHOR} ) {

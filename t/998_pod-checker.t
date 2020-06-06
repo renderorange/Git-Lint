@@ -16,4 +16,4 @@ if ($@) {
     plan( skip_all => $msg );
 }
 
-Test::Pod::all_pod_files_ok( Test::Pod::all_pod_files("$FindBin::Bin/../lib") );
+Test::Pod::all_pod_files_ok( Test::Pod::all_pod_files("$FindBin::RealBin/../lib") );
