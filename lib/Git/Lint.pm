@@ -3,8 +3,9 @@ package Git::Lint;
 use strict;
 use warnings;
 
-use Module::Loader;
 use Git::Lint::Config;
+use Try::Tiny;
+use Module::Loader;
 
 our $VERSION = '0.001';
 
@@ -23,14 +24,22 @@ sub new {
 
 sub run {
     my $self = shift;
+    my $opt  = shift;
 
     my @issues;
-    foreach my $check ( $self->{_loader}->find_modules('Git::Lint::Check::Commit') ) {
-        $self->{_loader}->load($check);
-        my $plugin = $check->new();
+    foreach my $check ( @{ $self->{_config}{profiles}{ $opt->{profile} } } ) {
+        my $class = 'Git::Lint::Check::Commit::' . $check;
+        try {
+            $self->{_loader}->load($class);
+        }
+        catch {
+            my $exception = $_;
+            die "git-lint: $exception\n";
+        };
+        my $plugin = $class->new();
 
         # ensure the plugins don't manipulate the original input
-        my $input = $check->diff();
+        my $input = $class->diff();
         my @lines = @{$input};
         push @issues, $plugin->check( \@lines );
     }

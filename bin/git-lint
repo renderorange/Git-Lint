@@ -12,17 +12,23 @@ use Git::Lint;
 
 my $VERSION = '0.001';
 
-my %opt;
+my %opt = (
+    profile => 'default',
+);
 Getopt::Long::GetOptions(
     \%opt,
+    'profile=s',
     'version' => sub { print "git-lint version $VERSION\n"; exit 0 },
     'help',
 ) or Pod::Usage::pod2usage( -exitval => 1 );
 
 Pod::Usage::pod2usage( -exitval => 0 ) if ( $opt{help} );
 
+delete $opt{version};
+delete $opt{help};
+
 my $lint = Git::Lint->new();
-$lint->run();
+$lint->run(\%opt);
 
 if ( keys %{ $lint->{issues} } ) {
     print STDERR "the following issues were found:\n\n";
@@ -52,8 +58,7 @@ git-lint - linter for git
 
 =head1 SYNOPSIS
 
- git-lint [--version]
-          [--help]
+ git-lint [--profile <name>] [--version] [--help]
 
 =head1 DESCRIPTION
 
@@ -62,6 +67,12 @@ C<git-lint> is a program to lint git commits.
 =head1 OPTIONS
 
 =over
+
+=item --profile
+
+Run a specific profile of checks.
+
+Defaults to the 'default' profile.
 
 =item --version
 
