@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 use Module::Loader;
+use Git::Lint::Config;
 
 our $VERSION = '0.001';
 
@@ -12,6 +13,7 @@ sub new {
     my $self  = {
         issues    => {},
         '_loader' => Module::Loader->new(),
+        '_config' => Git::Lint::Config->new(),
     };
 
     bless $self, $class;

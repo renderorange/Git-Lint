@@ -1,0 +1,10 @@
+# GitLint config
+# the following can be added to ~/.gitconfig or /repo/.git/config
+# settings here will override those set in Git::Lint::Config
+
+[lint "profiles"]
+    # create a whitespace profile with specific modules
+    whitespace = Whitespace, OtherModule
+
+    # override the default profile to only contain Whitespace
+    default = Whitespace
