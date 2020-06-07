@@ -21,7 +21,7 @@ sub diff {
     }
     catch {
         chomp( my $exception = $_ );
-        die "gitlint: $exception\n";
+        die "git-lint: $exception\n";
     };
 
     if ($head) {
@@ -39,7 +39,7 @@ sub diff {
     }
     catch {
         chomp( my $exception = $_ );
-        die "gitlint: $exception\n";
+        die "git-lint: $exception\n";
     };
 
     unless (@diff) {

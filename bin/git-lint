@@ -15,7 +15,7 @@ my $VERSION = '0.001';
 my %opt;
 Getopt::Long::GetOptions(
     \%opt,
-    'version' => sub { print "gitlint version $VERSION\n"; exit 0 },
+    'version' => sub { print "git-lint version $VERSION\n"; exit 0 },
     'help',
 ) or Pod::Usage::pod2usage( -exitval => 1 );
 
@@ -48,16 +48,16 @@ __END__
 
 =head1 NAME
 
-gitlint - linter for git
+git-lint - linter for git
 
 =head1 SYNOPSIS
 
- gitlint [--version]
-         [--help]
+ git-lint [--version]
+          [--help]
 
 =head1 DESCRIPTION
 
-C<gitlint> is a program to lint git commits.
+C<git-lint> is a program to lint git commits.
 
 =head1 OPTIONS
 

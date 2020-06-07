@@ -38,7 +38,7 @@ sub user_config {
     }
     catch {
         chomp( my $exception = $_ );
-        die "gitlint: $exception\n";
+        die "git-lint: $exception\n";
     };
 
     my %parsed_config = ();
