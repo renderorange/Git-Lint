@@ -80,6 +80,26 @@ Git::Lint::Config - configuration for C<Git::Lint>
 
 C<Git::Lint::Config> defines and loads settings for C<Git::Lint>.
 
+=head1 CONSTRUCTOR
+
+=over
+
+=item new
+
+Returns a reference to a new C<Git::Lint::Config> object.
+
+=back
+
+=head1 METHODS
+
+=over
+
+=item user_config
+
+Reads, parses, and returns the user config settings from C<git config>.
+
+=back
+
 =head1 CONFIGURATION
 
 Configuration is done through C<git config> files (F<~/.gitconfig> or F</repo/.git/config>).
@@ -92,7 +112,7 @@ The C<Git::Lint::Config> object will contain the following keys:
 
 The C<profiles> key by default contains one profile, C<default>, which contains all check modules.
 
-The C<default> profile can be overridden by C<git config>.
+The C<default> profile can be overridden through C<git config>.
 
 To set the default profile to only run the C<Whitespace> check:
 
@@ -109,7 +129,5 @@ Or set the default profile to C<Whitespace> and the fictional check, C<Flipdoozl
 =head1 AUTHOR
 
 Blaine Motsinger C<blaine@renderorange.com>
-
-=head1 COPYRIGHT
 
 =cut
