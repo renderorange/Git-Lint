@@ -6,3 +6,4 @@ notes/
 backup/
 cover_db/
 tmp/
+nytprof*
