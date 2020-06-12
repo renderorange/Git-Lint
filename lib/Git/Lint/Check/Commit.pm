@@ -5,26 +5,26 @@ use warnings;
 
 use parent 'Git::Lint::Check';
 
-use Try::Tiny;
-use Git::Repository ();
+use Capture::Tiny;
 
 our $VERSION = '0.001';
 
 sub diff {
     my $self = shift;
 
-    my @git_head_cmd = (qw{ rev-parse --verify HEAD });
+    my @git_head_cmd = (qw{ git rev-parse --verify HEAD });
 
     my $against;
-    my $head = try {
-        return Git::Repository->run(@git_head_cmd);
-    }
-    catch {
-        chomp( my $exception = $_ );
-        die "git-lint: $exception\n";
+    my ($stdout, $stderr, $exit) = Capture::Tiny::capture {
+        system(@git_head_cmd);
     };
 
-    if ($head) {
+    if ($exit) {
+        chomp($stderr);
+        die "git-lint: $stderr\n";
+    }
+
+    if ($stdout) {
         $against = 'HEAD';
     }
     else {
@@ -32,21 +32,22 @@ sub diff {
         $against = '4b825dc642cb6eb9a060e54bf8d69288fbee4904';
     }
 
-    my @git_diff_index_cmd = ( qw{ diff-index -p -M --cached }, $against );
+    my @git_diff_index_cmd = ( qw{ git diff-index -p -M --cached }, $against );
 
-    my @diff = try {
-        return Git::Repository->run(@git_diff_index_cmd);
-    }
-    catch {
-        chomp( my $exception = $_ );
-        die "git-lint: $exception\n";
+    ($stdout, $stderr, $exit) = Capture::Tiny::capture {
+        system(@git_diff_index_cmd);
     };
 
-    unless (@diff) {
+    if ($exit) {
+        chomp($stderr);
+        die "git-lint: $stderr\n";
+    }
+
+    unless ($stdout) {
         exit 0;
     }
 
-    return \@diff;
+    return [ split( /\n/, $stdout ) ];
 }
 
 sub report {
