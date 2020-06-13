@@ -108,3 +108,48 @@ sub parse {
 }
 
 1;
+
+__END__
+
+=pod
+
+=head1 NAME
+
+Git::Lint::Check::Commit - parent module for Commit check modules
+
+=head1 SYNOPSIS
+
+ use Git::Lint::Check::Commit;
+
+ my $plugin = Git::Lint::Check::Commit->new();
+ my $input  = $plugin->diff();
+
+=head1 DESCRIPTION
+
+C<Git::Lint::Check::Commit> is the parent module for Commit check modules.
+
+It contains methods which Commit check modules use for their check process and is not meant to be run outside of the context of child check modules.
+
+=head1 METHODS
+
+=over
+
+=item diff
+
+Returns the diff of the commits to check.
+
+=item report
+
+Formats the returned line violation into the expected format.
+
+=item parse
+
+Parses the diff input for violations using the match subref check.
+
+=back
+
+=head1 AUTHOR
+
+Blaine Motsinger C<blaine@renderorange.com>
+
+=cut
