@@ -27,3 +27,41 @@ sub check {
 }
 
 1;
+
+__END__
+
+=pod
+
+=head1 NAME
+
+Git::Lint::Check::Commit::UnresolvedConflict - check for lines with unresolved commit conflicts
+
+=head1 SYNOPSIS
+
+ my $plugin = Git::Lint::Check::Commit::UnresolvedConflict->new();
+
+ my $input = $plugin->diff();
+ my @lines = @{$input};
+ my @issues = $plugin->check( \@lines );
+
+=head1 DESCRIPTION
+
+C<Git::Lint::Check::Commit::UnresolvedConflict> is a C<Git::Lint::Check::Commit> module which checks git diff input for unresolved commit conflicts.
+
+This module defines the subref that matches the violation.
+
+=head1 METHODS
+
+=over
+
+=item check
+
+Method that defines the check subref and passes it to C<Git::Lint::Check::Commit>'s parse method.
+
+=back
+
+=head1 AUTHOR
+
+Blaine Motsinger C<blaine@renderorange.com>
+
+=cut
