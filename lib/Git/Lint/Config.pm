@@ -5,7 +5,7 @@ use warnings;
 
 use Module::Loader;
 use List::MoreUtils ();
-use Capture::Tiny;
+use Git::Lint::Command;
 
 our $VERSION = '0.001';
 
@@ -38,17 +38,10 @@ sub user_config {
 
     my @git_config_cmd = (qw{ git config --get-regexp ^lint });
 
-    my ($stdout, $stderr, $exit) = Capture::Tiny::capture {
-        system(@git_config_cmd);
-    };
-
-    if ($exit) {
-        chomp($stderr);
-        die "git-lint: $stderr\n";
-    }
+    my $config_raw = Git::Lint::Command::run( \@git_config_cmd );
 
     my %parsed_config = ();
-    foreach my $line ( split( /\n/, $stdout ) ) {
+    foreach my $line ( split( /\n/, $config_raw ) ) {
         next unless $line =~ /^lint\.(\w+).(\w+)\s+(.+)$/;
         my ( $cat, $key, $value ) = ( $1, $2, $3 );
 

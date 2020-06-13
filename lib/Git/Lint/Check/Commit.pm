@@ -5,7 +5,7 @@ use warnings;
 
 use parent 'Git::Lint::Check';
 
-use Capture::Tiny;
+use Git::Lint::Command;
 
 our $VERSION = '0.001';
 
@@ -15,16 +15,9 @@ sub diff {
     my @git_head_cmd = (qw{ git rev-parse --verify HEAD });
 
     my $against;
-    my ($stdout, $stderr, $exit) = Capture::Tiny::capture {
-        system(@git_head_cmd);
-    };
+    my $head = Git::Lint::Command::run( \@git_head_cmd );
 
-    if ($exit) {
-        chomp($stderr);
-        die "git-lint: $stderr\n";
-    }
-
-    if ($stdout) {
+    if ($head) {
         $against = 'HEAD';
     }
     else {
@@ -34,20 +27,13 @@ sub diff {
 
     my @git_diff_index_cmd = ( qw{ git diff-index -p -M --cached }, $against );
 
-    ($stdout, $stderr, $exit) = Capture::Tiny::capture {
-        system(@git_diff_index_cmd);
-    };
+    my $diff = Git::Lint::Command::run( \@git_diff_index_cmd );
 
-    if ($exit) {
-        chomp($stderr);
-        die "git-lint: $stderr\n";
-    }
-
-    unless ($stdout) {
+    unless ($diff) {
         exit 0;
     }
 
-    return [ split( /\n/, $stdout ) ];
+    return [ split( /\n/, $diff ) ];
 }
 
 sub report {
