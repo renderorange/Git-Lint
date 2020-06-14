@@ -13,6 +13,10 @@ use Git::Lint;
 my $VERSION = '0.001';
 
 my %opt = (
+    # TODO: until the 'message' check mode is implemented, default to 'commit.'
+    # until then, we're silently running check => commit and don't open that
+    # option to the user.
+    check   => 'commit',
     profile => 'default',
 );
 Getopt::Long::GetOptions(
@@ -31,15 +35,20 @@ my $lint = Git::Lint->new();
 $lint->run(\%opt);
 
 if ( keys %{ $lint->{issues} } ) {
-    print STDERR "the following issues were found:\n\n";
+    print STDERR "the following issues were found in your ";
 
-    foreach my $filename ( keys %{ $lint->{issues} } ) {
-        print STDERR $filename . "\n";
+    if ($opt{check} eq 'commit') {
+        print STDERR "commit:\n\n";
 
-        foreach my $issue ( @{ $lint->{issues}{$filename} } ) {
-            print STDERR $issue . "\n";
+        foreach my $filename ( keys %{ $lint->{issues} } ) {
+            print STDERR $filename . "\n";
+            print STDERR $_ . "\n" foreach @{ $lint->{issues}{$filename} };
+            print STDERR "\n";
         }
-
+    }
+    else {
+        print STDERR "message:\n\n";
+        print STDERR $_ . "\n" foreach @{ $lint->{issues} };
         print STDERR "\n";
     }
 
@@ -70,7 +79,7 @@ C<git-lint> is a program to lint git commits.
 
 =item --profile
 
-Run a specific profile of checks.
+Run a specific profile of check modules.
 
 Defaults to the 'default' profile.
 

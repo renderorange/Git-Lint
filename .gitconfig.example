@@ -2,7 +2,7 @@
 # the following can be added to ~/.gitconfig or /repo/.git/config
 # settings here will override those set in Git::Lint::Config
 
-[lint "profiles"]
+[lint "profiles.commit"]
     # create a whitespace profile with specific modules
     whitespace = Whitespace, OtherModule
 

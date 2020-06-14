@@ -32,11 +32,14 @@ sub run {
     my $opt  = shift;
 
     die 'git-lint: profile ' . $opt->{profile} . ' was not found' . "\n"
-        unless exists $self->config->{profiles}{ $opt->{profile} };
+        unless exists $self->config->{profiles}{ $opt->{check} }{ $opt->{profile} };
+
+    my $check = lc $opt->{check};
+    $check = ucfirst $check;
 
     my @issues;
-    foreach my $check ( @{ $self->config->{profiles}{ $opt->{profile} } } ) {
-        my $class = 'Git::Lint::Check::Commit::' . $check;
+    foreach my $module ( @{ $self->config->{profiles}{ $opt->{check} }{ $opt->{profile} } } ) {
+        my $class = q{Git::Lint::Check::} . $check . q{::} . $module;
         try {
             $self->{_loader}->load($class);
         }
@@ -46,14 +49,24 @@ sub run {
         };
         my $plugin = $class->new();
 
-        # ensure the plugins don't manipulate the original input
+        # TODO: implement 'message' check mode
         my $input = $class->diff();
+
+        # ensure the plugins don't manipulate the original input
         my @lines = @{$input};
         push @issues, $plugin->check( \@lines );
     }
 
     foreach my $issue (@issues) {
-        push @{ $self->{issues}{ $issue->{filename} } }, $issue->{message};
+        if ( $opt->{check} eq 'commit' ) {
+            push @{ $self->{issues}{ $issue->{filename} } }, $issue->{message};
+        }
+        else {
+            # TODO: the 'message' check mode isn't implemented yet, so the 'issue'
+            # data structure may not be accurate.
+            # until then, this is just a stub which won't be run.
+            push @{ $self->{issues} }, $issue->{message};
+        }
     }
 
     return;

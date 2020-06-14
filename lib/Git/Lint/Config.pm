@@ -17,16 +17,20 @@ sub new {
     my $namespace = 'Git::Lint::Check::Commit';
     my @checks    = List::MoreUtils::apply {s/$namespace\:\://g} $loader->find_modules( $namespace, { max_depth => 1 } );
 
-    my $self = { profiles => { default => \@checks } };
+    # TODO: load Message namespace
+
+    my $self = { profiles => { commit => { default => \@checks } } };
 
     bless $self, $class;
 
     my $user_config = $self->user_config();
 
-    # user defined profiles override default profiles
+    # user defined profiles override internally defined profiles
     foreach my $cat ( keys %{$user_config} ) {
-        foreach my $key ( keys %{ $user_config->{$cat} } ) {
-            $self->{$cat}{$key} = $user_config->{$cat}{$key};
+        foreach my $check ( keys %{ $user_config->{$cat} } ) {
+            foreach my $profile ( keys %{ $user_config->{$cat}{$check} } ) {
+                $self->{$cat}{$check}{$profile} = $user_config->{$cat}{$check}{$profile};
+            }
         }
     }
 
@@ -42,11 +46,11 @@ sub user_config {
 
     my %parsed_config = ();
     foreach my $line ( split( /\n/, $config_raw ) ) {
-        next unless $line =~ /^lint\.(\w+).(\w+)\s+(.+)$/;
-        my ( $cat, $key, $value ) = ( $1, $2, $3 );
+        next unless $line =~ /^lint\.(\w+).(\w+).(\w+)\s+(.+)$/;
+        my ( $cat, $check, $profile, $value ) = ( $1, $2, $3, $4 );
 
         my @values = List::MoreUtils::apply {s/^\s+|\s+$//g} split( /,/, $value );
-        push @{ $parsed_config{$cat}{$key} }, @values;
+        push @{ $parsed_config{$cat}{$check}{$profile} }, @values;
     }
 
     return \%parsed_config;
@@ -103,18 +107,18 @@ The C<Git::Lint::Config> object will contain the following keys:
 
 =item profiles
 
-The C<profiles> key by default contains one profile, C<default>, which contains all check modules.
+The C<profiles> key by default contains one profile per C<check> mode, C<default>, which contains all check modules for that mode.
 
 The C<default> profile can be overridden through C<git config>.
 
-To set the default profile to only run the C<Whitespace> check:
+To set the default profile for the commit check mode to only run the C<Whitespace> check:
 
- [lint "profiles"]
+ [lint "profiles.commit"]
      default = Whitespace
 
-Or set the default profile to C<Whitespace> and the fictional check, C<Flipdoozler>:
+Or set the default profile for the commit check mode to C<Whitespace> and the fictional check, C<Flipdoozler>:
 
- [lint "profiles"]
+ [lint "profiles.commit"]
      default = Whitespace, Flipdoozler
 
 =back
