@@ -14,12 +14,9 @@ sub run {
         system( @{$command} );
     };
 
-    if ($exit) {
-        chomp($stderr);
-        die "git-lint: $stderr\n";
-    }
+    chomp($stderr);
 
-    return $stdout;
+    return ( $stdout, $stderr, $exit );
 }
 
 1;
@@ -35,7 +32,7 @@ Git::Lint::Command - run commands
 =head1 SYNOPSIS
 
  use Git::Lint::Command;
- my $config_raw = Git::Lint::Command::run(\@git_config_cmd);
+ my ($stdout, $stderr, $exit) = Git::Lint::Command::run(\@git_config_cmd);
 
 =head1 DESCRIPTION
 
@@ -47,7 +44,7 @@ C<Git::Lint::Command> runs commands and returns output.
 
 =item run
 
-Runs the passed command and returns the output.
+Runs the passed command and returns the output from STDOUT, STDERR, and the exit code.
 
 =back
 

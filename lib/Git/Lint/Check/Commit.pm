@@ -15,9 +15,15 @@ sub diff {
     my @git_head_cmd = (qw{ git rev-parse --verify HEAD });
 
     my $against;
-    my $head = Git::Lint::Command::run( \@git_head_cmd );
+    my ( $stdout, $stderr, $exit ) = Git::Lint::Command::run( \@git_head_cmd );
 
-    if ($head) {
+    # TODO: this needs to be researched a better way to detect if the commit
+    # is the initial commit.
+    if ( $exit && $stderr ne 'fatal: Needed a single revision' ) {
+        die "git-lint: $stderr\n";
+    }
+
+    if ($stdout) {
         $against = 'HEAD';
     }
     else {
@@ -27,13 +33,15 @@ sub diff {
 
     my @git_diff_index_cmd = ( qw{ git diff-index -p -M --cached }, $against );
 
-    my $diff = Git::Lint::Command::run( \@git_diff_index_cmd );
+    ( $stdout, $stderr, $exit ) = Git::Lint::Command::run( \@git_diff_index_cmd );
 
-    unless ($diff) {
+    die "git-lint: $stderr\n" if $exit;
+
+    unless ($stdout) {
         exit 0;
     }
 
-    return [ split( /\n/, $diff ) ];
+    return [ split( /\n/, $stdout ) ];
 }
 
 sub report {

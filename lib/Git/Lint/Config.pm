@@ -42,10 +42,12 @@ sub user_config {
 
     my @git_config_cmd = (qw{ git config --get-regexp ^lint });
 
-    my $config_raw = Git::Lint::Command::run( \@git_config_cmd );
+    my ( $stdout, $stderr, $exit ) = Git::Lint::Command::run( \@git_config_cmd );
+
+    die "git-lint: $stderr\n" if $exit;
 
     my %parsed_config = ();
-    foreach my $line ( split( /\n/, $config_raw ) ) {
+    foreach my $line ( split( /\n/, $stdout ) ) {
         next unless $line =~ /^lint\.(\w+).(\w+).(\w+)\s+(.+)$/;
         my ( $cat, $check, $profile, $value ) = ( $1, $2, $3, $4 );
 
