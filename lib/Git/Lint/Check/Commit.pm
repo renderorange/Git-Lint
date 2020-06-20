@@ -12,14 +12,19 @@ our $VERSION = '0.001';
 sub diff {
     my $self = shift;
 
-    my @git_head_cmd = (qw{ git rev-parse --verify HEAD });
+    my @git_head_cmd = (qw{ git show-ref --head });
 
     my $against;
     my ( $stdout, $stderr, $exit ) = Git::Lint::Command::run( \@git_head_cmd );
 
-    # TODO: this needs to be researched a better way to detect if the commit
-    # is the initial commit.
-    if ( $exit && $stderr ne 'fatal: Needed a single revision' ) {
+    # show-ref --head returns 1 if there are no prior commits, but doesn't
+    # return a message to stderr.  since we need to halt for other errors and
+    # can't rely on the error code alone, checking for stderr seems like the
+    # least worst way to detect if we encountered any other errors.
+    # checking the error string for 'fatal: Needed a single revision' was
+    # the previous way we were checking for initial commit, but seemed more
+    # brittle over the long term to check for a specific error string.
+    if ( $exit && $stderr ) {
         die "git-lint: $stderr\n";
     }
 
