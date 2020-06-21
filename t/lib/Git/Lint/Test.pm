@@ -24,6 +24,22 @@ sub import {
     return;
 }
 
+sub override_capture_tiny {
+    my %args = (
+        stdout => '',
+        stderr => '',
+        exit   => 0,
+        @_,
+    );
+
+    require Capture::Tiny;
+
+    no warnings 'redefine', 'prototype';
+    *Capture::Tiny::capture = sub {
+        return ( $args{stdout}, $args{stderr}, $args{exit} );
+    };
+}
+
 1;
 
 __END__
@@ -45,6 +61,24 @@ Git::Lint::Test - testing module for Git::Lint
 C<Git::Lint::Test> sets up the testing environment and modules needed for tests.
 
 Methods from C<Test::More> are exported and available for the tests.
+
+=head1 SUBROUTINES
+
+=over
+
+=item override_capture_tiny
+
+Overrides and sets the output of C<Capture::Tiny::capture>.
+
+ARGS are C<stdout>, C<stderr>, and C<exit>.
+
+ Git::Lint::Test::override_capture_tiny(
+     stdout => "fake return\n", stderr => '', exit => 0
+ );
+
+If undefined, C<stdout> and C<stderr> default to empty string. C<exit> defaults to 0.
+
+=back
 
 =head1 AUTHOR
 
