@@ -12,6 +12,18 @@ our $VERSION = '0.001';
 sub diff {
     my $self = shift;
 
+    my $diff_arref = $self->_diff_index( $self->_against );
+
+    unless ($diff_arref) {
+        exit 0;
+    }
+
+    return $diff_arref;
+}
+
+sub _against {
+    my $self = shift;
+
     my @git_head_cmd = (qw{ git show-ref --head });
 
     my $against;
@@ -36,15 +48,18 @@ sub diff {
         $against = '4b825dc642cb6eb9a060e54bf8d69288fbee4904';
     }
 
+    return $against;
+}
+
+sub _diff_index {
+    my $self    = shift;
+    my $against = shift;
+
     my @git_diff_index_cmd = ( qw{ git diff-index -p -M --cached }, $against );
 
-    ( $stdout, $stderr, $exit ) = Git::Lint::Command::run( \@git_diff_index_cmd );
+    my ( $stdout, $stderr, $exit ) = Git::Lint::Command::run( \@git_diff_index_cmd );
 
     die "git-lint: $stderr\n" if $exit;
-
-    unless ($stdout) {
-        exit 0;
-    }
 
     return [ split( /\n/, $stdout ) ];
 }
