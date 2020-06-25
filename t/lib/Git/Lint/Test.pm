@@ -24,20 +24,23 @@ sub import {
     return;
 }
 
-sub override_capture_tiny {
+sub override {
     my %args = (
-        stdout => '',
-        stderr => '',
-        exit   => 0,
+        package => undef,
+        name    => undef,
+        subref  => undef,
         @_,
     );
 
-    require Capture::Tiny;
+    eval "require $args{package}";
 
+    my $fullname = sprintf "%s::%s", $args{package}, $args{name};
+
+    no strict 'refs';
     no warnings 'redefine', 'prototype';
-    *Capture::Tiny::capture = sub {
-        return ( $args{stdout}, $args{stderr}, $args{exit} );
-    };
+    *$fullname = $args{subref};
+
+    return;
 }
 
 1;
@@ -66,17 +69,17 @@ Methods from C<Test::More> are exported and available for the tests.
 
 =over
 
-=item override_capture_tiny
+=item override
 
-Overrides and sets the output of C<Capture::Tiny::capture>.
+Overrides subroutines
 
-ARGS are C<stdout>, C<stderr>, and C<exit>.
+ARGS are C<package>, C<name>, and C<subref>.
 
- Git::Lint::Test::override_capture_tiny(
-     stdout => "fake return\n", stderr => '', exit => 0
+ Git::Lint::Test::override(
+     package => 'Git::Lint::Check::Commit',
+     name    => '_against',
+     subref  => sub { return 'HEAD' },
  );
-
-If undefined, C<stdout> and C<stderr> default to empty string. C<exit> defaults to 0.
 
 =back
 

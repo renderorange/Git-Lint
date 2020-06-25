@@ -12,7 +12,11 @@ use_ok( $class );
 SUCCESS: {
     note( 'success' );
 
-    Git::Lint::Test::override_capture_tiny( stdout => "fake return\n" );
+    Git::Lint::Test::override(
+        package => 'Capture::Tiny',
+        name    => 'capture',
+        subref  => sub { return ( "fake return\n", '', 0 ) },
+    );
     my @cmd = ( qw{fake command} );
     my ( $stdout, $stderr, $exit ) = Git::Lint::Command::run( \@cmd );
 
@@ -24,7 +28,11 @@ SUCCESS: {
 FAILURE: {
     note( 'failure' );
 
-    Git::Lint::Test::override_capture_tiny( stdout => '', stderr => "fake failure\n", exit => 1 );
+    Git::Lint::Test::override(
+        package => 'Capture::Tiny',
+        name    => 'capture',
+        subref  => sub { return ( '', "fake failure\n", 1 ) },
+    );
     my @cmd = ( qw{fake command} );
     my ( $stdout, $stderr, $exit ) = Git::Lint::Command::run( \@cmd );
 
