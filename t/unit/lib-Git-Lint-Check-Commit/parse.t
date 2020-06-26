@@ -52,6 +52,11 @@ EXCEPTION: {
         dies_ok( sub { $plugin->parse( %input ) }, "dies if missing $required" );
         like( $@, qr/^$required is a required argument/, 'exception matches expected' );
     }
+
+    $input{match} = 'not a code ref';
+    my $plugin = $class->new();
+    dies_ok( sub { $plugin->parse( %input ) }, 'dies if match is not a code ref' );
+    like( $@, qr/match argument must be a code ref/, 'exception matches expected' );
 }
 
 done_testing;
