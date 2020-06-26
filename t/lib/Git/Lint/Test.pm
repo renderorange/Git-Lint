@@ -21,6 +21,8 @@ sub import {
 
     Test::More->export_to_level(1);
 
+    require Test::Warnings;
+
     return;
 }
 
