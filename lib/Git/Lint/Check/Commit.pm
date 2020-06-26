@@ -97,6 +97,9 @@ sub parse {
             unless defined $args->{$_};
     }
 
+    die 'match argument must be a code ref'
+        unless ref $args->{match} eq 'CODE';
+
     my @issues;
     my $filename;
     my $lineno;
