@@ -44,7 +44,9 @@ sub user_config {
 
     my ( $stdout, $stderr, $exit ) = Git::Lint::Command::run( \@git_config_cmd );
 
-    die "git-lint: $stderr\n" if $exit;
+    # if there is no user config, the git config command above will return 1
+    # but without stderr.
+    die "git-lint: $stderr\n" if $exit && $stderr;
 
     my %parsed_config = ();
     foreach my $line ( split( /\n/, $stdout ) ) {
