@@ -104,27 +104,27 @@ sub parse {
     my $filename;
     my $lineno;
 
-    foreach ( @{ $args->{input} } ) {
-        if (m|^diff --git a/(.*) b/\1$|) {
+    foreach my $line ( @{ $args->{input} } ) {
+        if ( $line =~ m|^diff --git a/(.*) b/\1$| ) {
             $filename = $1;
             next;
         }
 
-        if (/^@@ -\S+ \+(\d+)/) {
+        if ( $line =~ /^@@ -\S+ \+(\d+)/ ) {
             $lineno = $1 - 1;
             next;
         }
 
-        if (/^ /) {
+        if ( $line =~ /^ / ) {
             $lineno++;
             next;
         }
 
-        if (s/^\+//) {
+        if ( $line =~ s/^\+// ) {
             $lineno++;
-            chomp;
+            chomp $line;
 
-            if ( $args->{match}->($_) ) {
+            if ( $args->{match}->($line) ) {
                 push @issues,
                     $self->report(
                     filename => $filename,
