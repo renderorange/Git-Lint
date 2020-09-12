@@ -120,6 +120,11 @@ sub parse {
             next;
         }
 
+        if ( $line =~ /^--- / || $line =~ /^\+\+\+ / ) {
+            $lineno++;
+            next;
+        }
+
         if ( $line =~ s/^\+// ) {
             $lineno++;
             chomp $line;
