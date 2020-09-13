@@ -35,10 +35,10 @@ my $lint = Git::Lint->new();
 $lint->run(\%opt);
 
 if ( keys %{ $lint->{issues} } ) {
-    print STDERR "the following issues were found in your ";
+    print STDERR "git-lint: the following issues were found in your ";
 
     if ($opt{check} eq 'commit') {
-        print STDERR "commit:\n\n";
+        print STDERR "commit\n\n";
 
         foreach my $filename ( keys %{ $lint->{issues} } ) {
             print STDERR $filename . "\n";
@@ -47,7 +47,7 @@ if ( keys %{ $lint->{issues} } ) {
         }
     }
     else {
-        print STDERR "message:\n\n";
+        print STDERR "message\n\n";
         print STDERR $_ . "\n" foreach @{ $lint->{issues} };
         print STDERR "\n";
     }
