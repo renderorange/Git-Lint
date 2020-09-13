@@ -13,7 +13,6 @@ sub new {
     my $class = shift;
     my $self  = {
         issues    => {},
-        '_loader' => Module::Loader->new(),
         '_config' => Git::Lint::Config->new(),
     };
 
@@ -37,11 +36,13 @@ sub run {
     my $check = lc $opt->{check};
     $check = ucfirst $check;
 
+    my $loader = Module::Loader->new;
+
     my @issues;
     foreach my $module ( @{ $self->config->{profiles}{ $opt->{check} }{ $opt->{profile} } } ) {
         my $class = q{Git::Lint::Check::} . $check . q{::} . $module;
         try {
-            $self->{_loader}->load($class);
+            $loader->load($class);
         }
         catch {
             my $exception = $_;
