@@ -10,7 +10,7 @@ use Getopt::Long ();
 use Pod::Usage   ();
 use Git::Lint;
 
-my $VERSION = '0.001';
+my $VERSION = '0.002';
 
 my %opt = (
     # TODO: until the 'message' check mode is implemented, default to 'commit.'
