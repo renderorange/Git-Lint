@@ -102,6 +102,47 @@ Print the help menu.
 
 =back
 
+=head1 CONFIGURATION
+
+Configuration is done through C<git config> files (F<~/.gitconfig> or F</repo/.git/config>).
+
+Only one profile, C<default>, is defined internally. C<default> contains all check modules by default.
+
+The C<default> profile can be overridden through C<git config>.
+
+To set the default profile to only run the C<Whitespace> check:
+
+ [lint "profiles.commit"]
+     default = Whitespace
+
+Or set the default profile to C<Whitespace> and the fictional check, C<Flipdoozler>:
+
+ [lint "profiles.commit"]
+     default = Whitespace, Flipdoozler
+
+Additional profiles can be added with a new name and list of checks to run.
+
+ [lint "profiles.commit"]
+     default = Whitespace, Flipdoozler
+     hardcore = Other, Module, Names
+
+=head1 INSTALLATION
+
+To enable as a C<pre-commit> hook, create a symlink to the C<pre-commit.example> script named C<pre-commit> in the C<.git/hooks> directory of the repo you want to check.
+
+ ln -s ~/git/Git-Lint/bin/pre-commit.example pre-commit
+
+To automate running other profiles, a new `pre-commit` script can be created and linked to the `pre-commit` hook in the repo you want to check.
+
+ ~/git/Git-Lint/bin $ cat pre-commit.hardcore
+ #!/bin/bash
+
+ perl ~/git/Git-Lint/bin/git-lint --profile hardcore
+
+To enable as a C<commit-msg> hook, create a symlink to the C<commit-msg.example> script named C<commit-msg> in the C<.git/hooks> directory of the repo you want to check.
+
+ ln -s ~/git/Git-Lint/bin/commit-msg.example commit-msg
+
 =head1 AUTHOR
 
 Blaine Motsinger C<blaine@renderorange.com>

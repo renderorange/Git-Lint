@@ -121,24 +121,6 @@ Returns the C<Git::Lint::Config> object created by C<Git::Lint>.
 
 =back
 
-=head1 CONFIGURATION
-
-Configuration is done through C<git config> files (F<~/.gitconfig> or F</repo/.git/config>).
-
-Only one profile, C<default>, is defined internally. C<default> contains all check modules by default.
-
-The C<default> profile can be overridden through C<git config>.
-
-To set the default profile to only run the C<Whitespace> check:
-
- [lint "profiles"]
-     default = Whitespace
-
-Or set the default profile to C<Whitespace> and the fictional check, C<Flipdoozler>:
-
- [lint "profiles"]
-     default = Whitespace, Flipdoozler
-
 =head1 AUTHOR
 
 Blaine Motsinger C<blaine@renderorange.com>

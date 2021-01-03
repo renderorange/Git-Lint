@@ -5,7 +5,7 @@ Pluggable lint framework for git, written in Perl.
 ## SYNOPSIS
 
 ```
-git-lint [--profile <name>] [--version] [--help]
+git-lint [--check <commit|message>] <message_file> [--profile <name>] [--version] [--help]
 ```
 
 ## DESCRIPTION
@@ -13,6 +13,12 @@ git-lint [--profile <name>] [--version] [--help]
 `git-lint` is a program to lint git commits.
 
 ## OPTIONS
+
+### --check
+
+Run either check mode commit or message.
+
+If check type is message, `git-lint` expects the file path of the commit message to check as an unnamed option.
 
 ### --profile
 
@@ -39,21 +45,21 @@ The `default` profile can be overridden through `git config`.
 To set the default profile to only run the `Whitespace` check:
 
 ```
-[lint "profiles"]
+[lint "profiles.commit"]
     default = Whitespace
 ```
 
 Or set the default profile to `Whitespace` and the fictional check, `Flipdoozler`:
 
 ```
-[lint "profiles"]
+[lint "profiles.commit"]
     default = Whitespace, Flipdoozler
 ```
 
 Additional profiles can be added with a new name and list of checks to run.
 
 ```
-[lint "profiles"]
+[lint "profiles.commit"]
     default = Whitespace, Flipdoozler
     hardcore = Other, Module, Names
 ```
@@ -75,6 +81,12 @@ To automate running other profiles, a new `pre-commit` script can be created and
 #!/bin/bash
 
 perl ~/git/Git-Lint/bin/git-lint --profile hardcore
+```
+
+To enable as a `commit-msg` hook, create a symlink to the `commit-msg.example` script named `commit-msg` in the `.git/hooks` directory of the repo you want to check.
+
+```
+ln -s ~/git/Git-Lint/bin/commit-msg.example commit-msg
 ```
 
 ## AUTHOR
