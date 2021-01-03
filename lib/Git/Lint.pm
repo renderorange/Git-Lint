@@ -12,7 +12,7 @@ our $VERSION = '0.002';
 sub new {
     my $class = shift;
     my $self  = {
-        issues    => {},
+        issues    => undef,
         '_config' => Git::Lint::Config->new(),
     };
 
@@ -50,8 +50,8 @@ sub run {
         };
         my $plugin = $class->new();
 
-        # TODO: implement 'message' check mode
-        my $input = $class->diff();
+        # TODO: this would be better to be named the same method
+        my $input = ( $opt->{check} eq 'commit' ? $class->diff() : $class->message( file => $opt->{file} ) );
 
         # ensure the plugins don't manipulate the original input
         my @lines = @{$input};
@@ -63,9 +63,6 @@ sub run {
             push @{ $self->{issues}{ $issue->{filename} } }, $issue->{message};
         }
         else {
-            # TODO: the 'message' check mode isn't implemented yet, so the 'issue'
-            # data structure may not be accurate.
-            # until then, this is just a stub which won't be run.
             push @{ $self->{issues} }, $issue->{message};
         }
     }

@@ -13,20 +13,23 @@ use Git::Lint;
 my $VERSION = '0.002';
 
 my %opt = (
-    # TODO: until the 'message' check mode is implemented, default to 'commit.'
-    # until then, we're silently running check => commit and don't open that
-    # option to the user.
-    check   => 'commit',
     profile => 'default',
 );
 Getopt::Long::GetOptions(
     \%opt,
+    'check=s',
     'profile=s',
     'version' => sub { print "git-lint version $VERSION\n"; exit 0 },
     'help',
 ) or Pod::Usage::pod2usage( -exitval => 1 );
 
 Pod::Usage::pod2usage( -exitval => 0 ) if ( $opt{help} );
+Pod::Usage::pod2usage( -exitval => 1 ) unless ( $opt{check} && ( $opt{check} eq 'commit' || $opt{check} eq 'message' ) );
+
+if ( $opt{check} eq 'message' ) {
+    $opt{file} = shift @ARGV;
+    Pod::Usage::pod2usage( -exitval => 1 ) unless $opt{file};
+}
 
 delete $opt{version};
 delete $opt{help};
@@ -34,7 +37,7 @@ delete $opt{help};
 my $lint = Git::Lint->new();
 $lint->run(\%opt);
 
-if ( keys %{ $lint->{issues} } ) {
+if ( $lint->{issues} ) {
     print STDERR "git-lint: the following issues were found in your ";
 
     if ($opt{check} eq 'commit') {
@@ -47,7 +50,7 @@ if ( keys %{ $lint->{issues} } ) {
         }
     }
     else {
-        print STDERR "message\n\n";
+        print STDERR "commit message\n\n";
         print STDERR $_ . "\n" foreach @{ $lint->{issues} };
         print STDERR "\n";
     }
@@ -67,7 +70,7 @@ git-lint - linter for git
 
 =head1 SYNOPSIS
 
- git-lint [--profile <name>] [--version] [--help]
+ git-lint [--check <commit|message>] <message_file> [--profile <name>] [--version] [--help]
 
 =head1 DESCRIPTION
 
@@ -76,6 +79,12 @@ C<git-lint> is a program to lint git commits.
 =head1 OPTIONS
 
 =over
+
+=item --check
+
+Run either check mode commit or message.
+
+If check type is message, C<git-lint> expects the file path of the commit message to check as an unnamed option.
 
 =item --profile
 

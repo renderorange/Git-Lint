@@ -11,15 +11,23 @@ our $VERSION = '0.002';
 
 sub new {
     my $class = shift;
+    my $self  = { profiles => undef };
 
     # all check modules are added to the default profile
-    my $loader    = Module::Loader->new;
-    my $namespace = 'Git::Lint::Check::Commit';
-    my @checks    = List::MoreUtils::apply {s/$namespace\:\://g} $loader->find_modules( $namespace, { max_depth => 1 } );
+    my $loader        = Module::Loader->new;
+    my $namespace     = 'Git::Lint::Check::Commit';
+    my @commit_checks = List::MoreUtils::apply {s/$namespace\:\://g} $loader->find_modules( $namespace, { max_depth => 1 } );
 
-    # TODO: load Message namespace
+    if (@commit_checks) {
+        $self->{profiles}{commit}{default} = \@commit_checks;
+    }
 
-    my $self = { profiles => { commit => { default => \@checks } } };
+    $namespace = 'Git::Lint::Check::Message';
+    my @message_checks = List::MoreUtils::apply {s/$namespace\:\://g} $loader->find_modules( $namespace, { max_depth => 1 } );
+
+    if (@message_checks) {
+        $self->{profiles}{message}{default} = \@message_checks;
+    }
 
     bless $self, $class;
 
