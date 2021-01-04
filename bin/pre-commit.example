@@ -6,4 +6,4 @@
 # pre-commit in the .git/hooks directory of the repo you want to check.
 # /repo/.git/hooks (GIT_DIR!) $ ln -s ~/git/Git-Lint/bin/pre-commit.example pre-commit
 
-perl ~/git/Git-Lint/bin/git-lint --profile default
+perl ~/git/Git-Lint/bin/git-lint --check commit --profile default
