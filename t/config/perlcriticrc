@@ -107,10 +107,16 @@ forbid = last left right no abstract contract record second close
 
 # don't require constants inplace of magic variables
 # I'm still on the fence about this
-# [-ValuesAndExpressions::ProhibitMagicNumbers]
+#[-ValuesAndExpressions::ProhibitMagicNumbers]
 
 # don't prohibit constant pragma
 [-ValuesAndExpressions::ProhibitConstantPragma]
+
+# don't prohibit $!
+[-Variables::ProhibitPunctuationVars]
+
+# don't require checked return of close
+[-InputOutput::RequireCheckedClose]
 
 
 ## TODO: re-evaluate these
