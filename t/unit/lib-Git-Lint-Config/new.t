@@ -10,21 +10,23 @@ use Test::Deep;
 my $class = 'Git::Lint::Config';
 use_ok( $class );
 
+Git::Lint::Test::override(
+    package => 'Module::Loader',
+    name    => 'find_modules',
+    subref  => sub {
+                   my $self      = shift;
+                   my $namespace = shift;
+
+                   return (
+                       $namespace eq 'Git::Lint::Check::Commit' ?
+                           qw( Git::Lint::Check::Commit::One Git::Lint::Check::Commit::Two )
+                         : qw( Git::Lint::Check::Message::One Git::Lint::Check::Message::Two )
+                   )
+    },
+);
+
 HAPPY_PATH: {
     note( 'happy path' );
-
-    # default config will contain
-    # { profiles => { commit => { default => [ 'One', 'Two' ] } } }
-    Git::Lint::Test::override(
-        package => 'Module::Loader',
-        name    => 'find_modules',
-        subref  => sub {
-                       return (
-                           'Git::Lint::Check::Commit::One',
-                           'Git::Lint::Check::Commit::Two',
-                       )
-        },
-    );
 
     # user config will return nothing to parse
     Git::Lint::Test::override(
@@ -34,7 +36,17 @@ HAPPY_PATH: {
     );
 
     my $object = $class->new();
-    my $expected = { profiles => { commit => { default => [ 'One', 'Two' ] } } };
+
+    my $expected = {
+        profiles => {
+            commit => {
+                default => [ 'One', 'Two' ],
+            },
+            message => {
+                default => [ 'One', 'Two' ],
+            },
+        },
+    };
     bless $expected, 'Git::Lint::Config';
     cmp_deeply( $object, $expected, 'default config contains default' );
 }
@@ -42,21 +54,18 @@ HAPPY_PATH: {
 USER_ADD: {
     note( 'user add' );
 
-    # default config will contain
-    # { profiles => { commit => { default => [ 'One', 'Two' ] } } }
-    Git::Lint::Test::override(
-        package => 'Module::Loader',
-        name    => 'find_modules',
-        subref  => sub {
-                       return (
-                           'Git::Lint::Check::Commit::One',
-                           'Git::Lint::Check::Commit::Two',
-                       )
-        },
-    );
-
     # user config will add but not override
-    my $expected = { profiles => { commit => { default => [ 'One', 'Two' ], shoe => [ 'Gaze' ] } } };
+    my $expected = {
+        profiles => {
+            commit => {
+                default => [ 'One', 'Two' ],
+                shoe => [ 'Gaze' ],
+            },
+            message => {
+                default => [ 'One', 'Two' ],
+            },
+        },
+    };
     my $user_config = { profiles => { commit => { shoe => [ 'Gaze' ] } } };
     Git::Lint::Test::override(
         package => 'Git::Lint::Config',
@@ -72,21 +81,19 @@ USER_ADD: {
 USER_OVERRIDE_AND_ADD: {
     note( 'user override and add' );
 
-    # default config will contain
-    # { profiles => { commit => { default => [ 'One', 'Two' ] } } }
-    Git::Lint::Test::override(
-        package => 'Module::Loader',
-        name    => 'find_modules',
-        subref  => sub {
-                       return (
-                           'Git::Lint::Check::Commit::One',
-                           'Git::Lint::Check::Commit::Two',
-                       )
-        },
-    );
-
     # user config will override everything in default
-    my $expected = { profiles => { commit => { default => [ 'Three' ], shoe => [ 'Gaze' ] } } };
+    my $expected = {
+        profiles => {
+            commit => {
+                default => [ 'Three' ],
+                shoe => [ 'Gaze' ],
+            },
+            message => {
+                default => [ 'One', 'Two' ],
+            },
+        },
+    };
+
     Git::Lint::Test::override(
         package => 'Git::Lint::Config',
         name    => 'user_config',
