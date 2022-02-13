@@ -83,6 +83,18 @@ sub report {
     return { filename => $args->{filename}, message => $message };
 }
 
+sub get_filename {
+    my $self = shift;
+    my $line = shift;
+
+    my $filename;
+    if ( $line =~ m|^diff --git a/(.*) b/\1$| ) {
+        $filename = $1;
+    }
+
+    return $filename;
+}
+
 sub parse {
     my $self = shift;
     my $args = {
@@ -105,8 +117,9 @@ sub parse {
     my $lineno;
 
     foreach my $line ( @{ $args->{input} } ) {
-        if ( $line =~ m|^diff --git a/(.*) b/\1$| ) {
-            $filename = $1;
+        my $ret = $self->get_filename($line);
+        if ($ret) {
+            $filename = $ret;
             next;
         }
 
@@ -177,6 +190,10 @@ Returns the diff of the commits to check.
 =item report
 
 Formats the returned line violation into the expected format.
+
+=item get_filename
+
+Parses a single line of git diff output, then returns the filename found within.
 
 =item parse
 
