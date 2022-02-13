@@ -5,7 +5,7 @@ use warnings;
 
 use Capture::Tiny;
 
-our $VERSION = '0.002';
+our $VERSION = '0.003';
 
 sub run {
     my $command = shift;
