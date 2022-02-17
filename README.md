@@ -89,6 +89,10 @@ To enable as a `commit-msg` hook, create a symlink to the `commit-msg.example` s
 ln -s ~/git/Git-Lint/bin/commit-msg.example commit-msg
 ```
 
+## COPYRIGHT AND LICENSE
+
+Copyright (c) 2022 Blaine Motsinger under the MIT license.
+
 ## AUTHOR
 
 Blaine Motsinger <blaine@renderorange.com>

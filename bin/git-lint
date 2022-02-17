@@ -143,6 +143,10 @@ To enable as a C<commit-msg> hook, create a symlink to the C<commit-msg.example>
 
  ln -s ~/git/Git-Lint/bin/commit-msg.example commit-msg
 
+=head1 COPYRIGHT AND LICENSE
+
+Copyright (c) 2022 Blaine Motsinger under the MIT license.
+
 =head1 AUTHOR
 
 Blaine Motsinger C<blaine@renderorange.com>
