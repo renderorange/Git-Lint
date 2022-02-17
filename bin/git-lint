@@ -10,7 +10,7 @@ use Getopt::Long ();
 use Pod::Usage   ();
 use Git::Lint;
 
-my $VERSION = '0.003';
+my $VERSION = '0.004';
 
 my %opt = (
     profile => 'default',

@@ -5,7 +5,7 @@ use warnings;
 
 use parent 'Git::Lint::Check::Message';
 
-our $VERSION = '0.003';
+our $VERSION = '0.004';
 
 my $check_name = 'summary length';
 
