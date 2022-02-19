@@ -104,6 +104,18 @@ Print the help menu.
 
 =back
 
+=head1 CHECK MODES
+
+C<git-lint> has 2 check modes, C<commit> and C<message>.
+
+=head2 commit
+
+The C<commit> check mode checks each line of the commit diff for issues defined in the commit check modules.
+
+=head2 message
+
+The C<message> check mode checks the commit message for issues defined in the message check modules.
+
 =head1 CONFIGURATION
 
 Configuration is done through C<git config> files (F<~/.gitconfig> or F</repo/.git/config>).
@@ -112,12 +124,12 @@ Only one profile, C<default>, is defined internally. C<default> contains all che
 
 The C<default> profile can be overridden through C<git config>.
 
-To set the default profile to only run the C<Whitespace> check:
+To set the default profile to only run the C<Whitespace> commit check:
 
  [lint "profiles.commit"]
      default = Whitespace
 
-Or set the default profile to C<Whitespace> and the fictional check, C<Flipdoozler>:
+Or set the default profile to C<Whitespace> and the fictional commit check, C<Flipdoozler>:
 
  [lint "profiles.commit"]
      default = Whitespace, Flipdoozler
