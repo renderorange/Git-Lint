@@ -5,7 +5,9 @@ Pluggable lint framework for git, written in Perl.
 ## SYNOPSIS
 
 ```
-git-lint [--check <commit|message>] <message_file> [--profile <name>] [--version] [--help]
+git-lint [--check commit] [--check message <message_file>]
+         [--profile <name>]
+         [--version] [--help]
 ```
 
 ## DESCRIPTION
