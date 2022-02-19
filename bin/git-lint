@@ -23,8 +23,8 @@ Getopt::Long::GetOptions(
     'help',
 ) or Pod::Usage::pod2usage( -exitval => 1 );
 
-Pod::Usage::pod2usage( -exitval => 0 ) if ( $opt{help} );
-Pod::Usage::pod2usage( -exitval => 1 ) unless ( $opt{check} && ( $opt{check} eq 'commit' || $opt{check} eq 'message' ) );
+Pod::Usage::pod2usage( -exitval => 0, -verbose => 1 ) if ( $opt{help} );
+Pod::Usage::pod2usage( -exitval => 1, -verbose => 0 ) unless $opt{check} && ( $opt{check} eq 'commit' || $opt{check} eq 'message' );
 
 if ( $opt{check} eq 'message' ) {
     $opt{file} = shift @ARGV;
@@ -70,7 +70,9 @@ git-lint - linter for git
 
 =head1 SYNOPSIS
 
- git-lint [--check <commit|message>] <message_file> [--profile <name>] [--version] [--help]
+ git-lint [--check commit] [--check message <message_file>]
+          [--profile <name>]
+          [--version] [--help]
 
 =head1 DESCRIPTION
 
