@@ -1,4 +1,4 @@
-package Git::Lint::Check::Message::Summary;
+package Git::Lint::Check::Message::SummaryLength;
 
 use strict;
 use warnings;
@@ -7,9 +7,10 @@ use parent 'Git::Lint::Check::Message';
 
 our $VERSION = '0.004';
 
-my $check_name = 'summary length';
-
 use constant SUMMARY_LENGTH => 50;
+
+my $check_name        = 'summary length';
+my $check_description = SUMMARY_LENGTH . ' characters or less';
 
 sub check {
     my $self  = shift;
@@ -25,7 +26,7 @@ sub check {
     return $self->parse(
         input => $input,
         match => $match,
-        check => $check_name,
+        check => $check_name . ' (' . $check_description . ')',
     );
 }
 
@@ -37,11 +38,11 @@ __END__
 
 =head1 NAME
 
-Git::Lint::Check::Message::Summary - check for line ending whitespace
+Git::Lint::Check::Message::SummaryLength - check summary length
 
 =head1 SYNOPSIS
 
- my $plugin = Git::Lint::Check::Message::Summary->new();
+ my $plugin = Git::Lint::Check::Message::SummaryLength->new();
 
  my $input = $plugin->message();
  my @lines = @{$input};
@@ -49,17 +50,13 @@ Git::Lint::Check::Message::Summary - check for line ending whitespace
 
 =head1 DESCRIPTION
 
-C<Git::Lint::Check::Message::Summary> is a C<Git::Lint::Check::Message> module which checks git commit message input to ensure the summary is 50 characters or less.
-
-This module defines the subref that matches the violation.
+C<Git::Lint::Check::Message::SummaryLength> is a C<Git::Lint::Check::Message> module which checks git commit message input to ensure the summary line is 50 characters or less.
 
 =head1 METHODS
 
 =over
 
 =item check
-
-Method that defines the check subref and passes it to C<Git::Lint::Check::Message>'s parse method.
 
 =back
 
