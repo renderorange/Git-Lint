@@ -7,7 +7,8 @@ use parent 'Git::Lint::Check::Commit';
 
 our $VERSION = '0.004';
 
-my $check_name = 'gofmt';
+my $check_name        = 'gofmt';
+my $check_description = 'not formatted';
 
 sub check {
     my $self  = shift;
@@ -28,7 +29,7 @@ sub check {
         die "gofmt: $stderr\n" if $exit;
 
         if ($stdout) {
-            push @issues, { filename => $filename, message => "* $check_name (not formatted)" };
+            push @issues, { filename => $filename, message => "* $check_name ($check_description)" };
         }
     }
 
