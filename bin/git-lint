@@ -28,7 +28,7 @@ Pod::Usage::pod2usage( -exitval => 1, -verbose => 0 ) unless $opt{check} && ( $o
 
 if ( $opt{check} eq 'message' ) {
     $opt{file} = shift @ARGV;
-    Pod::Usage::pod2usage( -exitval => 1 ) unless $opt{file};
+    Pod::Usage::pod2usage( -exitval => 1, -verbose => 0, -message => 'check message requires a filename' ) unless $opt{file};
 }
 
 delete $opt{version};
