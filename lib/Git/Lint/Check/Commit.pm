@@ -14,10 +14,6 @@ sub diff {
 
     my $diff_arref = $self->_diff_index( $self->_against );
 
-    unless ($diff_arref) {
-        exit 0;
-    }
-
     return $diff_arref;
 }
 
