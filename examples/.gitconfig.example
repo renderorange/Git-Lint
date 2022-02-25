@@ -8,3 +8,10 @@
 
     # override the default profile to only contain Whitespace
     default = Whitespace
+
+[lint "profiles.message"]
+    # create a summary profile with specific modules
+    summary = SummaryEndingPeriod, SummaryLength
+
+    # override the default profile to only contain SummaryLength, SummaryEndingPeriod, and BlankLineAfterSummary
+    default = SummaryLength, SummaryEndingPeriod, BlankLineAfterSummary

@@ -1,9 +1,0 @@
-#!/bin/bash
-
-# Update the path and options to match your path and preferred profile.
-
-# To enable as a commit-msg hook, create a symlink to this script named
-# commit-msg in the .git/hooks directory of the repo you want to check.
-# /repo/.git/hooks (GIT_DIR!) $ ln -s ~/git/Git-Lint/bin/commit-msg.example commit-msg
-
-perl ~/git/Git-Lint/bin/git-lint --check message --profile default $1
