@@ -18,7 +18,7 @@ HAPPY_PATH: {
     my $plugin = $class->new();
     my $issue  = $plugin->report( check => $check );
 
-    my $regex = qr{\* $check};
+    my $regex = qr{$check};
     my $expected = {
         message => re($regex),
     };

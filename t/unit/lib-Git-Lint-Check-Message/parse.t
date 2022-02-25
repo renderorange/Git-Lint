@@ -29,7 +29,7 @@ HAPPY_PATH: {
     my $plugin = $class->new();
     my @issues = $plugin->parse( input => $input, match => $match, check => 'test' );
 
-    my $issue = { message => re('\* test') };
+    my $issue = { message => re('test') };
     my @expected = ( $issue );
     cmp_deeply( \@issues, \@expected, 'return was the expected filestructure and content' );
 }

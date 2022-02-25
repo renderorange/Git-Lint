@@ -29,7 +29,7 @@ sub check {
         die "gofmt: $stderr\n" if $exit;
 
         if ($stdout) {
-            push @issues, { filename => $filename, message => "* $check_name ($check_description)" };
+            push @issues, { filename => $filename, message => "$check_name ($check_description)" };
         }
     }
 

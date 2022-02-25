@@ -49,7 +49,7 @@ sub report {
             unless defined $args->{$_};
     }
 
-    my $message = '* ' . $args->{check};
+    my $message = $args->{check};
 
     return { message => $message };
 }

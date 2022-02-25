@@ -74,7 +74,7 @@ sub report {
             unless defined $args->{$_};
     }
 
-    my $message = '* ' . $args->{check} . ' (line ' . $args->{lineno} . ')';
+    my $message = $args->{check} . ' (line ' . $args->{lineno} . ')';
 
     return { filename => $args->{filename}, message => $message };
 }

@@ -38,21 +38,17 @@ my $lint = Git::Lint->new();
 $lint->run(\%opt);
 
 if ( $lint->{issues} ) {
-    print STDERR "git-lint: the following issues were found in your ";
-
     if ($opt{check} eq 'commit') {
-        print STDERR "commit\n\n";
-
         foreach my $filename ( keys %{ $lint->{issues} } ) {
-            print STDERR $filename . "\n";
-            print STDERR $_ . "\n" foreach @{ $lint->{issues}{$filename} };
-            print STDERR "\n";
+            foreach my $issue ( @{ $lint->{issues}{$filename} } ) {
+                print STDERR "git-lint: [commit] $filename - " . $issue . "\n";
+            }
         }
     }
     else {
-        print STDERR "commit message\n\n";
-        print STDERR $_ . "\n" foreach @{ $lint->{issues} };
-        print STDERR "\n";
+        foreach my $issue ( @{ $lint->{issues} } ) {
+            print STDERR "git-lint: [message] " . $issue . "\n";
+        }
     }
 
     exit 1;
