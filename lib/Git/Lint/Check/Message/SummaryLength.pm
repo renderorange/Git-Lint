@@ -60,8 +60,4 @@ C<Git::Lint::Check::Message::SummaryLength> is a C<Git::Lint::Check::Message> mo
 
 =back
 
-=head1 AUTHOR
-
-Blaine Motsinger C<blaine@renderorange.com>
-
 =cut

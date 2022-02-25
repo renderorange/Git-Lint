@@ -64,8 +64,4 @@ Checks the filename for formatting using C<gofmt>.
 
 =back
 
-=head1 AUTHOR
-
-Blaine Motsinger C<blaine@renderorange.com>
-
 =cut

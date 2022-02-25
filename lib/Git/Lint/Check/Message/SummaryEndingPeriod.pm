@@ -58,8 +58,4 @@ C<Git::Lint::Check::Message::SummaryEndingPeriod> is a C<Git::Lint::Check::Messa
 
 =back
 
-=head1 AUTHOR
-
-Blaine Motsinger C<blaine@renderorange.com>
-
 =cut

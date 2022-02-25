@@ -160,45 +160,147 @@ __END__
 
 =head1 NAME
 
-Git::Lint::Check::Commit - parent module for Commit check modules
+Git::Lint::Check::Commit - parent module for commit check modules
 
 =head1 SYNOPSIS
 
- use Git::Lint::Check::Commit;
+ use parent 'Git::Lint::Check::Commit';
 
- my $plugin = Git::Lint::Check::Commit->new();
- my $input  = $plugin->diff();
+ # inside of the child module, check method
+ sub check {
+     my $self  = shift;
+     my $input = shift;
+
+     my $match = sub {
+         my $line = shift;
+         return 1 if $line =~ /\s$/;
+         return;
+     };
+
+     my @issues = $self->parse(
+         input => $input,
+         match => $match,
+         check => $check_name
+     );
+
+     return @issues;
+ }
 
 =head1 DESCRIPTION
 
-C<Git::Lint::Check::Commit> is the parent module for Commit check modules.
+C<Git::Lint::Check::Commit> provides methods for L<Git::Lint> commit check modules.
 
-It contains methods which Commit check modules use for their check process and is not meant to be run outside of the context of child check modules.
+This module is not meant to be initialized directly.
+
+=head1 ADDING CHECK MODULES
+
+To add check functionality to L<Git::Lint>, additional check modules can be created as child modules to C<Git::Lint::Check::Commit>.
+
+For an example to start creating commit check modules, see L<Git::Lint::Check::Commit::Whitespace> or any message check module released within this distribution.
+
+=head2 CHECK MODULE REQUIREMENTS
+
+Child modules must implement the C<check> method which gathers, formats, and returns a list of issues.
+
+The methods within this module can be used to parse and report the issues in the expected format, but are not required to be used.
+
+The issues returned from commit check modules must be a list of hash refs each with filename and message keys and values.
+
+ my @issues = (
+     {
+       'filename' => 'catalog.txt',
+       'message' => 'trailing whitespace (line 1)',
+     },
+     {
+       'filename' => 'catalog.txt',
+       'message' => 'trailing whitespace (line 2)',
+     },
+ );
+ 
+=head1 CONSTRUCTOR
+
+=head2 new
+
+This method is inherited from L<Git::Lint::Check>.
 
 =head1 METHODS
 
-=over
+=head2 diff
 
-=item diff
+Gathers, parses, and returns the commit diff.
 
-Returns the diff of the commits to check.
+=head3 ARGUMENTS
 
-=item report
+None.
+
+=head3 RETURNS
+
+An array ref of the diff of the commit.
+
+=head2 report
 
 Formats the returned line violation into the expected format.
 
-=item get_filename
+=head3 ARGUMENTS
 
-Parses a single line of git diff output, then returns the filename found within.
+=over
 
-=item parse
+=item filename
 
-Parses the diff input for violations using the match subref check.
+The name of the file from the commit diff.
+
+=item check
+
+The check name or message to format.
+
+=item lineno
+
+The line number being checked.
 
 =back
 
-=head1 AUTHOR
+=head3 RETURNS
 
-Blaine Motsinger C<blaine@renderorange.com>
+A hash ref with filename and message key and value.
+
+=head2 get_filename
+
+Parses the filename out of a single line of git diff output.
+
+=head3 ARGUMENTS
+
+None.
+
+The git diff line to be checked for filename is passed as unnamed input.
+
+=head3 RETURNS
+
+The filename, if found.
+
+=head2 parse
+
+Parses the diff input for violations using the match subref check.
+
+=head3 ARGUMENTS
+
+=over
+
+=item input
+
+Array ref of the commit diff input to check.
+
+=item match
+
+Code ref (sub reference) containing the check logic.
+
+=item check
+
+The check name or message to use for reporting issues.
+
+=back
+
+=head3 RETURNS
+
+A list of hashrefs of formatted issues.
 
 =cut

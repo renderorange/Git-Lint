@@ -48,8 +48,6 @@ Git::Lint::Check::Commit::Whitespace - check for line ending whitespace
 
 C<Git::Lint::Check::Commit::Whitespace> is a C<Git::Lint::Check::Commit> module which checks git diff input for line ending whitespace.
 
-This module defines the subref that matches the violation.
-
 =head1 METHODS
 
 =over
@@ -59,9 +57,5 @@ This module defines the subref that matches the violation.
 Method that defines the check subref and passes it to C<Git::Lint::Check::Commit>'s parse method.
 
 =back
-
-=head1 AUTHOR
-
-Blaine Motsinger C<blaine@renderorange.com>
 
 =cut

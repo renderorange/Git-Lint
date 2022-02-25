@@ -64,8 +64,4 @@ C<Git::Lint::Check::Message::BodyLineLength> is a C<Git::Lint::Check::Message> m
 
 =back
 
-=head1 AUTHOR
-
-Blaine Motsinger C<blaine@renderorange.com>
-
 =cut

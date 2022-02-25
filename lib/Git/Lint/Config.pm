@@ -7,7 +7,7 @@ use Module::Loader;
 use List::MoreUtils ();
 use Git::Lint::Command;
 
-our $VERSION = '0.007';
+our $VERSION = '0.008';
 
 sub new {
     my $class = shift;
@@ -76,7 +76,7 @@ __END__
 
 =head1 NAME
 
-Git::Lint::Config - configuration for C<Git::Lint>
+Git::Lint::Config - configuration for L<Git::Lint>
 
 =head1 SYNOPSIS
 
@@ -87,56 +87,52 @@ Git::Lint::Config - configuration for C<Git::Lint>
 
 =head1 DESCRIPTION
 
-C<Git::Lint::Config> defines and loads settings for C<Git::Lint>.
+C<Git::Lint::Config> defines and loads settings for L<Git::Lint>.
 
 =head1 CONSTRUCTOR
 
-=over
-
-=item new
+=head2 new
 
 Returns a reference to a new C<Git::Lint::Config> object.
 
-=back
-
 =head1 METHODS
 
-=over
-
-=item user_config
+=head2 user_config
 
 Reads, parses, and returns the user config settings from C<git config>.
-
-=back
 
 =head1 CONFIGURATION
 
 Configuration is done through C<git config> files (F<~/.gitconfig> or F</repo/.git/config>).
 
-The C<Git::Lint::Config> object will contain the following keys:
+Only one profile, C<default>, is defined internally. C<default> contains all check modules by default.
 
-=over
+The C<default> profile can be overridden through C<git config> files (F<~/.gitconfig> or F</repo/.git/config>).
 
-=item profiles
-
-The C<profiles> key by default contains one profile per C<check> mode, C<default>, which contains all check modules for that mode.
-
-The C<default> profile can be overridden through C<git config>.
-
-To set the default profile for the commit check mode to only run the C<Whitespace> check:
+To set the default profile to only run the C<Whitespace> commit check:
 
  [lint "profiles.commit"]
      default = Whitespace
 
-Or set the default profile for the commit check mode to C<Whitespace> and the fictional check, C<Flipdoozler>:
+Or set the default profile to C<Whitespace> and the fictional commit check, C<Flipdoozler>:
 
  [lint "profiles.commit"]
      default = Whitespace, Flipdoozler
 
-=back
+Additional profiles can be added with a new name and list of checks to run.
 
-=head1 AUTHOR
+ [lint "profiles.commit"]
+     default = Whitespace, Flipdoozler
+     hardcore = Other, Module, Names
 
-Blaine Motsinger C<blaine@renderorange.com>
+Message check profiles can also be defined.
+
+ [lint "profiles.message"]
+     # override the default profile to only contain SummaryLength, SummaryEndingPeriod, and BlankLineAfterSummary
+     default = SummaryLength, SummaryEndingPeriod, BlankLineAfterSummary
+     # create a summary profile with specific modules
+     summary = SummaryEndingPeriod, SummaryLength
+
+An example configuration is provided in the C<examples> directory of this project.
 
 =cut

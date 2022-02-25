@@ -48,8 +48,4 @@ Runs the passed command and returns the output from STDOUT, STDERR, and the exit
 
 =back
 
-=head1 AUTHOR
-
-Blaine Motsinger C<blaine@renderorange.com>
-
 =cut

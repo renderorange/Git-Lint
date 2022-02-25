@@ -78,7 +78,7 @@ __END__
 
 =head1 NAME
 
-Git::Lint - linter for git
+Git::Lint - lint git commits and messages
 
 =head1 SYNOPSIS
 
@@ -87,9 +87,17 @@ Git::Lint - linter for git
  my $lint = Git::Lint->new();
  $lint->run({ profile => 'default' });
 
+ git-lint [--check commit] [--check message <message_file>]
+          [--profile <name>]
+          [--version] [--help]
+
 =head1 DESCRIPTION
 
-C<Git::Lint> is a pluggable lint framework for git, written in Perl.
+C<Git::Lint> is a pluggable framework for linting git commits and messages.
+
+For the commandline interface to C<Git::Lint>, see the documentation for L<git-lint>.
+
+For adding check modules, see the documentation for L<Git::Lint::Check::Commit> and L<Git::Lint::Check::Message>.
 
 =head1 CONSTRUCTOR
 
@@ -117,9 +125,76 @@ The name of a defined set of check modules to run.
 
 =item config
 
-Returns the C<Git::Lint::Config> object created by C<Git::Lint>.
+Returns the L<Git::Lint::Config> object created by C<Git::Lint>.
 
 =back
+
+=head1 INSTALLATION
+
+To install C<Git::Lint>, download the latest release, then extract.
+
+ tar xzvf Git-Lint-0.008.tar.gz
+ cd Git-Lint-0.008
+
+or clone the repo.
+
+ git clone https://github.com/renderorange/Git-Lint.git
+ cd Git-Lint
+
+Generate the build and installation tooling.
+
+ perl Makefile.PL
+
+Then build, test, and install.
+
+ make
+ make test && make install
+
+=head1 CONFIGURATION
+
+Configuration is done through C<git config> files (F<~/.gitconfig> or F</repo/.git/config>).
+
+Only one profile, C<default>, is defined internally. C<default> contains all check modules by default.
+
+The C<default> profile can be overridden through C<git config> files (F<~/.gitconfig> or F</repo/.git/config>).
+
+To set the default profile to only run the C<Whitespace> commit check:
+
+ [lint "profiles.commit"]
+     default = Whitespace
+
+Or set the default profile to C<Whitespace> and the fictional commit check, C<Flipdoozler>:
+
+ [lint "profiles.commit"]
+     default = Whitespace, Flipdoozler
+
+Additional profiles can be added with a new name and list of checks to run.
+
+ [lint "profiles.commit"]
+     default = Whitespace, Flipdoozler
+     hardcore = Other, Module, Names
+
+Message check profiles can also be defined.
+
+ [lint "profiles.message"]
+     # override the default profile to only contain SummaryLength, SummaryEndingPeriod, and BlankLineAfterSummary
+     default = SummaryLength, SummaryEndingPeriod, BlankLineAfterSummary
+     # create a summary profile with specific modules
+     summary = SummaryEndingPeriod, SummaryLength
+
+An example configuration is provided in the C<examples> directory of this project.
+
+=head1 INSTALLATION
+
+To enable as a C<pre-commit> hook, copy the C<pre-commit> script from the C<example/hooks> directory into the C<.git/hooks> directory of the repo you want to check.
+
+Once copied, update the path and options to match your path and preferred profile.
+
+To enable as a C<commit-msg> hook, copy the C<commit-msg> script from the C<example/hooks> directory into the C<.git/hooks> directory of the repo you want to check.
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright (c) 2022 Blaine Motsinger under the MIT license.
 
 =head1 AUTHOR
 

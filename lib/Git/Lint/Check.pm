@@ -34,9 +34,7 @@ Git::Lint::Check - constructor for Git::Lint::Check modules
 
 C<Git::Lint::Check> provides a contructor for child modules.
 
-This module is not meant to be initialized directly, but through child modules.
-
-There isn't anything here anyway if you did.
+This module is not meant to be initialized directly.
 
 =head1 CONSTRUCTOR
 
@@ -44,12 +42,8 @@ There isn't anything here anyway if you did.
 
 =item new
 
-Returns a reference to a new C<Git::Lint::Check> object.
+Returns the C<Git::Lint::Check> object.
 
 =back
-
-=head1 AUTHOR
-
-Blaine Motsinger C<blaine@renderorange.com>
 
 =cut

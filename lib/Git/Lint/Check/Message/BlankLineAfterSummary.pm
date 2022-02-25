@@ -64,8 +64,4 @@ C<Git::Lint::Check::Message::BlankLineAfterSummary> is a C<Git::Lint::Check::Mes
 
 =back
 
-=head1 AUTHOR
-
-Blaine Motsinger C<blaine@renderorange.com>
-
 =cut

@@ -87,41 +87,123 @@ __END__
 
 =head1 NAME
 
-Git::Lint::Check::Message - parent module for Message check modules
+Git::Lint::Check::Message - parent module for message check modules
 
 =head1 SYNOPSIS
 
- use Git::Lint::Check::Message;
+ use parent 'Git::Lint::Check::Message';
 
- my $plugin = Git::Lint::Check::Message->new();
- my $input  = $plugin->message();
+ # inside of the child module, check method
+ sub check {
+     my $self  = shift;
+     my $input = shift;
+
+     my $match = sub {
+         my $lines_arref = shift;
+         my $summary     = shift @{$lines_arref};
+         return 1 if length $summary > SUMMARY_LENGTH;
+         return;
+     };
+
+     my @issues = $self->parse(
+         input => $input,
+         match => $match,
+         check => $check_message,
+     );
+
+     return @issues;
+ }
 
 =head1 DESCRIPTION
 
-C<Git::Lint::Check::Message> is the parent module for Message check modules.
+C<Git::Lint::Check::Message> provides methods for L<Git::Lint> message check modules.
 
-It contains methods which Message check modules use for their check process and is not meant to be run outside of the context of child check modules.
+This module is not meant to be initialized directly.
+
+=head1 ADDING CHECK MODULES
+
+To add check functionality to L<Git::Lint>, additional check modules can be created as child modules to C<Git::Lint::Check::Message>.
+
+For an example to start creating message check modules, see L<Git::Lint::Check::Message::SummaryLength> or any message check module released within this distribution.
+
+=head2 CHECK MODULE REQUIREMENTS
+
+Child modules must implement the C<check> method which gathers, formats, and returns a list of issues.
+
+The methods within this module can be used to parse and report the issues in the expected format, but are not required to be used.
+
+The issues returned from message check modules must be a list of hash refs each with a message key and value.
+
+ my @issues = (
+     { message => 'summary length (50 characters of less)' }
+ );
+ 
+=head1 CONSTRUCTOR
+
+=head2 new
+
+This method is inherited from L<Git::Lint::Check>.
 
 =head1 METHODS
 
+=head2 message
+
+Reads the input commit message from file and returns the contents.
+
+=head3 ARGUMENTS
+
 =over
 
-=item message
-
-Reads and returns an array ref of the commit message input.
-
-=item report
-
-Formats the returned line violation into the expected format.
-
-=item parse
-
-Parses the commit message input for violations using the match subref check.
+=item file
 
 =back
 
-=head1 AUTHOR
+=head3 RETURNS
 
-Blaine Motsinger C<blaine@renderorange.com>
+An array ref of the commit message input.
+
+=head2 report
+
+Formats the returned line violation into the expected format.
+
+=head3 ARGUMENTS
+
+=over
+
+=item check
+
+The check name or message to format.
+
+=back
+
+=head3 RETURNS
+
+A hash ref with the message key and value.
+
+=head2 parse
+
+Parses the commit message input for violations using the match subref check.
+
+=head3 ARGUMENTS
+
+=over
+
+=item input
+
+Array ref of the message input to check.
+
+=item match
+
+Code ref (sub reference) containing the check logic.
+
+=item check
+
+The check name or message to use for reporting issues.
+
+=back
+
+=head3 RETURNS
+
+A list of hashrefs of formatted issues.
 
 =cut

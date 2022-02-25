@@ -1,8 +1,13 @@
 # NAME
 
-git-lint - linter for git
+Git::Lint - lint git commits and messages
 
 # SYNOPSIS
+
+    use Git::Lint;
+
+    my $lint = Git::Lint->new();
+    $lint->run({ profile => 'default' });
 
     git-lint [--check commit] [--check message <message_file>]
              [--profile <name>]
@@ -10,41 +15,54 @@ git-lint - linter for git
 
 # DESCRIPTION
 
-`git-lint` is a program to lint git commits.
+`Git::Lint` is a pluggable framework for linting git commits and messages.
 
-# OPTIONS
+For the commandline interface to `Git::Lint`, see the documentation for [git-lint](https://metacpan.org/pod/git-lint).
 
-- --check
+For adding check modules, see the documentation for [Git::Lint::Check::Commit](https://metacpan.org/pod/Git%3A%3ALint%3A%3ACheck%3A%3ACommit) and [Git::Lint::Check::Message](https://metacpan.org/pod/Git%3A%3ALint%3A%3ACheck%3A%3AMessage).
 
-    Run either check mode commit or message.
+# CONSTRUCTOR
 
-    If check type is message, `git-lint` expects the file path of the commit message to check as an unnamed option.
+- new
 
-- --profile
+    Returns a reference to a new `Git::Lint` object.
 
-    Run a specific profile of check modules.
+# METHODS
 
-    Defaults to the 'default' profile.
+- run
 
-- --version
+    Loads the check modules as defined by `profile`.
 
-    Print the version.
+    `run` accepts the following arguments:
 
-- --help
+    **profile**
 
-    Print the help menu.
+    The name of a defined set of check modules to run.
 
-# CHECK MODES
+- config
 
-`git-lint` has 2 check modes, `commit` and `message`.
+    Returns the [Git::Lint::Config](https://metacpan.org/pod/Git%3A%3ALint%3A%3AConfig) object created by `Git::Lint`.
 
-## commit
+# INSTALLATION
 
-The `commit` check mode checks each line of the commit diff for issues defined in the commit check modules.
+To install `Git::Lint`, download the latest release, then extract.
 
-## message
+    tar xzvf Git-Lint-0.008.tar.gz
+    cd Git-Lint-0.008
 
-The `message` check mode checks the commit message for issues defined in the message check modules.
+or clone the repo.
+
+    git clone https://github.com/renderorange/Git-Lint.git
+    cd Git-Lint
+
+Generate the build and installation tooling.
+
+    perl Makefile.PL
+
+Then build, test, and install.
+
+    make
+    make test && make install
 
 # CONFIGURATION
 
@@ -52,7 +70,7 @@ Configuration is done through `git config` files (`~/.gitconfig` or `/repo/.git/
 
 Only one profile, `default`, is defined internally. `default` contains all check modules by default.
 
-The `default` profile can be overridden through `git config`.
+The `default` profile can be overridden through `git config` files (`~/.gitconfig` or `/repo/.git/config`).
 
 To set the default profile to only run the `Whitespace` commit check:
 
@@ -70,22 +88,23 @@ Additional profiles can be added with a new name and list of checks to run.
         default = Whitespace, Flipdoozler
         hardcore = Other, Module, Names
 
+Message check profiles can also be defined.
+
+    [lint "profiles.message"]
+        # override the default profile to only contain SummaryLength, SummaryEndingPeriod, and BlankLineAfterSummary
+        default = SummaryLength, SummaryEndingPeriod, BlankLineAfterSummary
+        # create a summary profile with specific modules
+        summary = SummaryEndingPeriod, SummaryLength
+
+An example configuration is provided in the `examples` directory of this project.
+
 # INSTALLATION
 
-To enable as a `pre-commit` hook, create a symlink to the `pre-commit.example` script named `pre-commit` in the `.git/hooks` directory of the repo you want to check.
+To enable as a `pre-commit` hook, copy the `pre-commit` script from the `example/hooks` directory into the `.git/hooks` directory of the repo you want to check.
 
-    ln -s ~/git/Git-Lint/bin/pre-commit.example pre-commit
+Once copied, update the path and options to match your path and preferred profile.
 
-To automate running other profiles, a new \`pre-commit\` script can be created and linked to the \`pre-commit\` hook in the repo you want to check.
-
-    ~/git/Git-Lint/bin $ cat pre-commit.hardcore
-    #!/bin/bash
-
-    perl ~/git/Git-Lint/bin/git-lint --profile hardcore
-
-To enable as a `commit-msg` hook, create a symlink to the `commit-msg.example` script named `commit-msg` in the `.git/hooks` directory of the repo you want to check.
-
-    ln -s ~/git/Git-Lint/bin/commit-msg.example commit-msg
+To enable as a `commit-msg` hook, copy the `commit-msg` script from the `example/hooks` directory into the `.git/hooks` directory of the repo you want to check.
 
 # COPYRIGHT AND LICENSE
 
