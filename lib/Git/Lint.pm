@@ -7,7 +7,7 @@ use Git::Lint::Config;
 use Try::Tiny;
 use Module::Loader;
 
-our $VERSION = '0.006';
+our $VERSION = '0.007';
 
 sub new {
     my $class = shift;
