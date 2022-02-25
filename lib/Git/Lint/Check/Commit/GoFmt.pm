@@ -5,7 +5,7 @@ use warnings;
 
 use parent 'Git::Lint::Check::Commit';
 
-our $VERSION = '0.005';
+our $VERSION = '0.006';
 
 my $check_name        = 'gofmt';
 my $check_description = 'not formatted';
