@@ -7,5 +7,4 @@ backup/
 cover_db/
 tmp/
 nytprof*
-t/data/
 *.orig
