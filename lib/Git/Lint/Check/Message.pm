@@ -16,6 +16,11 @@ sub message {
         @_,
     };
 
+    foreach ( keys %{$args} ) {
+        die "$_ is a required argument"
+            unless defined $args->{$_};
+    }
+
     my $lines_arref = [];
     open( my $message_fh, '<', $args->{file} )
         or die 'open: ' . $args->{file} . ': ' . $!;
