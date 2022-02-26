@@ -19,7 +19,7 @@ NO_USER_CONFIG: {
         subref  => sub { return ( '', '', 1 ) },
     );
 
-    my $object = $class->new();
+    my $object = $class->load();
     lives_ok( sub { $object->user_config() }, 'lives if no user config is defined' );
 }
 

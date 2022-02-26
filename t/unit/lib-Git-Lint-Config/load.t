@@ -35,7 +35,7 @@ HAPPY_PATH: {
         subref  => sub { return {} },
     );
 
-    my $object = $class->new();
+    my $object = $class->load();
 
     my $expected = {
         profiles => {
@@ -73,7 +73,7 @@ USER_ADD: {
         subref  => sub { return $user_config },
     );
 
-    my $object = $class->new();
+    my $object = $class->load();
     bless $expected, 'Git::Lint::Config';
     cmp_deeply( $object, $expected, 'default config contains default and user adds' );
 }
@@ -100,7 +100,7 @@ USER_OVERRIDE_AND_ADD: {
         subref  => sub { return $expected },
     );
 
-    my $object = $class->new();
+    my $object = $class->load();
     bless $expected, 'Git::Lint::Config';
     cmp_deeply( $object, $expected, 'user config overrides default and adds' );
 }

@@ -13,7 +13,7 @@ sub new {
     my $class = shift;
     my $self  = {
         issues    => undef,
-        '_config' => Git::Lint::Config->new(),
+        '_config' => Git::Lint::Config->load(),
     };
 
     bless $self, $class;

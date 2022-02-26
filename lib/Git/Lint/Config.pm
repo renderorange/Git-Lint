@@ -9,7 +9,7 @@ use Git::Lint::Command;
 
 our $VERSION = '0.008';
 
-sub new {
+sub load {
     my $class = shift;
     my $self  = { profiles => undef };
 
@@ -82,7 +82,7 @@ Git::Lint::Config - configuration for L<Git::Lint>
 
  use Git::Lint::Config;
 
- my $config   = Git::Lint::Config->new();
+ my $config   = Git::Lint::Config->load();
  my $profiles = $config->{profiles};
 
 =head1 DESCRIPTION
@@ -91,9 +91,9 @@ C<Git::Lint::Config> defines and loads settings for L<Git::Lint>.
 
 =head1 CONSTRUCTOR
 
-=head2 new
+=head2 load
 
-Returns a reference to a new C<Git::Lint::Config> object.
+Loads check modules and user config, then returns the C<Git::Lint::Config> object.
 
 =head1 METHODS
 
