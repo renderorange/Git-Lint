@@ -37,7 +37,7 @@ sub message {
     return $lines_arref;
 }
 
-sub report {
+sub format_issue {
     my $self = shift;
     my $args = {
         check => undef,
@@ -73,7 +73,7 @@ sub parse {
 
     my @issues;
     if ( $args->{match}->( $args->{input} ) ) {
-        push @issues, $self->report( check => $args->{check}, );
+        push @issues, $self->format_issue( check => $args->{check}, );
     }
 
     return @issues;
@@ -162,9 +162,9 @@ Reads the input commit message from file and returns the contents.
 
 An array ref of the commit message input.
 
-=head2 report
+=head2 format_issue
 
-Formats the returned line violation into the expected format.
+Formats the match information into the expected issue format.
 
 =head3 ARGUMENTS
 

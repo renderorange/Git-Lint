@@ -60,7 +60,7 @@ sub _diff_index {
     return [ split( /\n/, $stdout ) ];
 }
 
-sub report {
+sub format_issue {
     my $self = shift;
     my $args = {
         filename => undef,
@@ -140,7 +140,7 @@ sub parse {
 
             if ( $args->{match}->($line) ) {
                 push @issues,
-                    $self->report(
+                    $self->format_issue(
                     filename => $filename,
                     check    => $args->{check},
                     lineno   => $lineno,
@@ -237,9 +237,9 @@ None.
 
 An array ref of the diff of the commit.
 
-=head2 report
+=head2 format_issue
 
-Formats the returned line violation into the expected format.
+Formats the match information into the expected issue format.
 
 =head3 ARGUMENTS
 

@@ -8,35 +8,33 @@ use Git::Lint::Test;
 use Test::Deep;
 use Test::Exception;
 
-my $class = 'Git::Lint::Check::Commit';
+my $class = 'Git::Lint::Check::Message';
 use_ok( $class );
 
 HAPPY_PATH: {
     note( 'happy path' );
 
-    my $filename = 'test.txt';
-    my $check    = 'Test';
-    my $lineno   = 1;
-    my $plugin   = $class->new();
-    my $issue    = $plugin->report( filename => $filename, check => $check, lineno => $lineno );
+    my $check  = 'test';
+    my $plugin = $class->new();
+    my $issue  = $plugin->format_issue( check => $check );
 
+    my $regex = qr{$check};
     my $expected = {
-        filename => $filename,
-        message  => re( "$check.+$lineno" ),  # this is very loose but just want to check
-    };                                        # if the check name and lineno are in there.
+        message => re($regex),
+    };
     cmp_deeply( $issue, $expected, 'return was the expected filestructure and content' );
 }
 
 EXCEPTION: {
     note( 'exception' );
 
-    my %input = ( filename => 'test.txt', check => 'Test', lineno => 1 );
+    my %input = ( check => 'test' );
     foreach my $required ( keys %input ) {
         local $input{ $required };
         my $stored = delete $input{ $required };
 
         my $plugin = $class->new();
-        dies_ok( sub { $plugin->report( %input ) }, "dies if missing $required" );
+        dies_ok( sub { $plugin->format_issue( %input ) }, "dies if missing $required" );
         like( $@, qr/^$required is a required argument/, 'exception matches expected' );
     }
 }
