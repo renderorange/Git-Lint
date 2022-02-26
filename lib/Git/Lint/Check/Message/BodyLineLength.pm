@@ -48,7 +48,7 @@ Git::Lint::Check::Message::BodyLineLength - check body line length
 
  my $plugin = Git::Lint::Check::Message::BodyLineLength->new();
 
- my $input = $plugin->message();
+ my $input = $plugin->message( file => $filepath );
  my @lines = @{$input};
  my @issues = $plugin->check( \@lines );
 

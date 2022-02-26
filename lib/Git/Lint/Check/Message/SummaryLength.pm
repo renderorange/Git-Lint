@@ -44,7 +44,7 @@ Git::Lint::Check::Message::SummaryLength - check summary length
 
  my $plugin = Git::Lint::Check::Message::SummaryLength->new();
 
- my $input = $plugin->message();
+ my $input = $plugin->message( file => $filepath );
  my @lines = @{$input};
  my @issues = $plugin->check( \@lines );
 

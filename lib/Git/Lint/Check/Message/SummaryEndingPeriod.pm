@@ -42,7 +42,7 @@ Git::Lint::Check::Message::SummaryEndingPeriod - check for no summary ending per
 
  my $plugin = Git::Lint::Check::Message::SummaryEndingPeriod->new();
 
- my $input = $plugin->message();
+ my $input = $plugin->message( file => $filepath );
  my @lines = @{$input};
  my @issues = $plugin->check( \@lines );
 

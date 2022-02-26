@@ -48,7 +48,7 @@ Git::Lint::Check::Message::BlankLineAfterSummary - check for blank line after su
 
  my $plugin = Git::Lint::Check::Message::BlankLineAfterSummary->new();
 
- my $input = $plugin->message();
+ my $input = $plugin->message( file => $filepath );
  my @lines = @{$input};
  my @issues = $plugin->check( \@lines );
 
