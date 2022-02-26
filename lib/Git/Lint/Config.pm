@@ -7,7 +7,7 @@ use Module::Loader;
 use List::MoreUtils ();
 use Git::Lint::Command;
 
-our $VERSION = '0.008';
+our $VERSION = '0.009';
 
 sub load {
     my $class = shift;

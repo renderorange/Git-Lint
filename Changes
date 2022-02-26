@@ -1,5 +1,17 @@
 Revision history for perl module Git::Lint
 
+0.009 2022-02-26
+ - Fix documentation for message check modules
+ - Fix double installation sections in documentation
+ - Add cpanm to installation instructions
+ - Rename Config new to load
+ - Rename report method to format_issue
+ - Update MANIFEST for report method rename
+ - Remove GoFmt commit check module
+ - Update MANIFEST for GoFmt removal
+ - Fix message test for non-English locales
+ - Remove Config new test from MANIFEST
+
 0.008 2022-02-25
  - Move config and hook examples into examples dir
  - Documentation update
