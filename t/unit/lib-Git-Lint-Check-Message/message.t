@@ -45,7 +45,7 @@ EXCEPTION: {
 
     my $plugin = $class->new();
     dies_ok( sub { $plugin->message( %input ) }, 'dies if unable to open file' );
-    like( $@, qr/open: filename: No such file or directory/, 'exception matches expected' );
+    like( $@, qr/open: filename/, 'exception matches expected' );
 }
 
 done_testing;
