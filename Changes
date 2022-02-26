@@ -1,7 +1,9 @@
 Revision history for perl module Git::Lint
 
-0.008 YYYY-MM-DD
- - TODO
+0.008 2022-02-25
+ - Move config and hook examples into examples dir
+ - Documentation update
+ - Add initial build and install tooling
 
 0.007 2022-02-25
  - Simplify issue output
