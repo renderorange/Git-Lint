@@ -146,7 +146,7 @@ Message check profiles can also be defined.
 
 An example configuration is provided in the C<examples> directory of this project.
 
-=head1 INSTALLATION
+=head1 ENABLING CHECKS FOR REPOS
 
 To enable as a C<pre-commit> hook, copy the C<pre-commit> script from the C<example/hooks> directory into the C<.git/hooks> directory of the repo you want to check.
 

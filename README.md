@@ -98,7 +98,7 @@ Message check profiles can also be defined.
 
 An example configuration is provided in the `examples` directory of this project.
 
-# INSTALLATION
+# ENABLING CHECKS FOR REPOS
 
 To enable as a `pre-commit` hook, copy the `pre-commit` script from the `example/hooks` directory into the `.git/hooks` directory of the repo you want to check.
 
