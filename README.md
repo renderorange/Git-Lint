@@ -64,6 +64,10 @@ Then build, test, and install.
     make
     make test && make install
 
+`Git::Lint` can also be installed using [cpanm](https://metacpan.org/pod/cpanm).
+
+    cpanm Git::Lint
+
 # CONFIGURATION
 
 Configuration is done through `git config` files (`~/.gitconfig` or `/repo/.git/config`).

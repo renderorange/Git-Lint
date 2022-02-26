@@ -150,6 +150,10 @@ Then build, test, and install.
  make
  make test && make install
 
+C<Git::Lint> can also be installed using L<cpanm>.
+
+ cpanm Git::Lint
+
 =head1 CONFIGURATION
 
 Configuration is done through C<git config> files (F<~/.gitconfig> or F</repo/.git/config>).
