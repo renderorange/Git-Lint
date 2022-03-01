@@ -31,6 +31,20 @@ sub run {
     my $self = shift;
     my $opt  = shift;
 
+    foreach my $required (qw{profile check}) {
+        die "git-lint: $required is required\n"
+            unless defined $opt->{$required};
+    }
+
+    if ( $opt->{check} ne 'message' && $opt->{check} ne 'commit' ) {
+        die "git-lint: check must be either message or commit\n";
+    }
+
+    if ( $opt->{check} eq 'message' ) {
+        die "git-lint: file is required if check is message\n"
+            unless defined $opt->{file};
+    }
+
     die 'git-lint: profile ' . $opt->{profile} . ' was not found' . "\n"
         unless exists $self->config->{profiles}{ $opt->{check} }{ $opt->{profile} };
 
