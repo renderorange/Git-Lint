@@ -86,7 +86,8 @@ Git::Lint - lint git commits and messages
  use Git::Lint;
 
  my $lint = Git::Lint->new();
- $lint->run({ profile => 'default' });
+ $lint->run({ check => 'commit', profile => 'default' });
+ $lint->run({ check => 'message', file => 'file_path', profile => 'default' });
 
  git-lint [--check commit] [--check message <message_file>]
           [--profile <name>]
@@ -118,11 +119,19 @@ Returns a reference to a new C<Git::Lint> object.
 
 Loads the check modules as defined by C<profile>.
 
-C<run> accepts the following arguments:
+C<run> expects the following arguments:
 
 B<profile>
 
 The name of a defined set of check modules to run.
+
+B<check>
+
+Either C<commit> or C<message>.
+
+B<file>
+
+If C<check> is C<message>, C<file> is required.
 
 =item config
 

@@ -7,7 +7,8 @@ Git::Lint - lint git commits and messages
     use Git::Lint;
 
     my $lint = Git::Lint->new();
-    $lint->run({ profile => 'default' });
+    $lint->run({ check => 'commit', profile => 'default' });
+    $lint->run({ check => 'message', file => 'file_path', profile => 'default' });
 
     git-lint [--check commit] [--check message <message_file>]
              [--profile <name>]
@@ -33,11 +34,19 @@ For adding check modules, see the documentation for [Git::Lint::Check::Commit](h
 
     Loads the check modules as defined by `profile`.
 
-    `run` accepts the following arguments:
+    `run` expects the following arguments:
 
     **profile**
 
     The name of a defined set of check modules to run.
+
+    **check**
+
+    Either `commit` or `message`.
+
+    **file**
+
+    If `check` is `message`, `file` is required.
 
 - config
 
