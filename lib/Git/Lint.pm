@@ -9,21 +9,22 @@ use Module::Loader;
 
 our $VERSION = '0.009';
 
+my $config;
+
 sub new {
     my $class = shift;
-    my $self  = {
-        issues    => undef,
-        '_config' => Git::Lint::Config->load(),
-    };
+    my $self  = { issues => undef };
 
     bless $self, $class;
+
+    $config = Git::Lint::Config->load();
 
     return $self;
 }
 
 sub config {
     my $self = shift;
-    return $self->{_config};
+    return $config;
 }
 
 sub run {
