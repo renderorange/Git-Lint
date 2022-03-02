@@ -13,6 +13,9 @@ sub load {
     my $class = shift;
     my $self  = { profiles => undef };
 
+    $self->{profiles}{commit}{default}  = [];
+    $self->{profiles}{message}{default} = [];
+
     # all check modules are added to the default profile
     my $loader        = Module::Loader->new;
     my $namespace     = 'Git::Lint::Check::Commit';
