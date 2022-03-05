@@ -7,7 +7,7 @@ use parent 'Git::Lint::Check';
 
 use Git::Lint::Command;
 
-our $VERSION = '0.012';
+our $VERSION = '0.013';
 
 sub diff {
     my $self = shift;
