@@ -40,6 +40,7 @@ MYMETA\.yml$
 \.tar\.gz$$
 
 README.md
+MANIFEST.bak
 
 # Author tests and files
 996_perl-tidy.t
