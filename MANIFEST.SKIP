@@ -38,6 +38,7 @@ t/tmp/
 MYMETA\.json
 MYMETA\.yml$
 \.tar\.gz$$
+Git-Lint-
 
 README.md
 MANIFEST.bak
