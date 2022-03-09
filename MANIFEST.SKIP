@@ -47,6 +47,7 @@ MANIFEST.bak
 101_perl-critic.t
 102_pod-checker.t
 103_pod-coverage.t
+200_manifest.t
 perltidyrc
 perlcriticrc
 run_cover
