@@ -3,7 +3,7 @@ package Git::Lint::Check;
 use strict;
 use warnings;
 
-our $VERSION = '0.015';
+our $VERSION = '0.016';
 
 sub new {
     my $class = shift;
