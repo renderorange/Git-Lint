@@ -56,6 +56,6 @@ WriteMakefile(
     ],
 
     test => {
-        TESTS => 't/*.t t/*/*/*.t',
+        TESTS => 't/*/*/*.t',
     },
 );
