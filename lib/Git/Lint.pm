@@ -7,7 +7,7 @@ use Git::Lint::Config;
 use Try::Tiny;
 use Module::Loader;
 
-our $VERSION = '0.016';
+our $VERSION = '0.017';
 
 my $config;
 
