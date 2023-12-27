@@ -220,6 +220,16 @@ Once copied, update the path and options to match your path and preferred profil
 
 To enable as a C<commit-msg> hook, copy the C<commit-msg> script from the C<example/hooks> directory into the C<.git/hooks> directory of the repo you want to check.
 
+=head1 KNOWN CAVEATS
+
+Since the default commit check profile runs all commit checks by default, an unchanged default profile will not allow the user to add a commit since they'll get a warning for either indent tabs or indent spaces.  To work around this, create a new profile, or override the de
+fault profile, to use the one being used for the project.
+
+ [lint "profiles.commit"]
+     default = Whitespace, IndentSpaces
+
+Both the IndentTabs and IndentSpaces commit checks overlap with the MixedIndentTabsSpaces check.  A user may find two warnings given if mixed indent tabs and spaces are found; one for the tab (or space) indent and one for the mixed indent tab (or space).
+
 =head1 COPYRIGHT AND LICENSE
 
 Copyright (c) 2022 Blaine Motsinger under the MIT license.
