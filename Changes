@@ -1,5 +1,9 @@
 Revision history for perl module Git::Lint
 
+0.018 2023-12-27
+ - Add commit checks IndentSpaces and IndentTabs
+ - Add known caveats section to the README
+
 0.017 2023-12-12
  - Add commit check MixedIndentTabsSpaces
 
