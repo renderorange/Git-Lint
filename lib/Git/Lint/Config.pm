@@ -57,7 +57,14 @@ sub user_config {
 
     # if there is no user config, the git config command above will return 1
     # but without stderr.
-    die "git-lint: $stderr\n" if $exit && $stderr;
+    if ( $exit && !$stderr ) {
+        die "configuration setup is required. see the documentation for instructions.\n";
+    }
+
+    # if there was an error, propagate that up.
+    if ( $exit && $stderr ) {
+        die "$stderr\n";
+    }
 
     my %parsed_config = ();
     foreach my $line ( split( /\n/, $stdout ) ) {

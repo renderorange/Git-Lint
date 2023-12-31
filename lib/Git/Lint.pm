@@ -32,20 +32,20 @@ sub run {
     my $opt  = shift;
 
     foreach my $required (qw{profile check}) {
-        die "git-lint: $required is required\n"
+        die "$required is required\n"
             unless defined $opt->{$required};
     }
 
     if ( $opt->{check} ne 'message' && $opt->{check} ne 'commit' ) {
-        die "git-lint: check must be either message or commit\n";
+        die "check must be either message or commit\n";
     }
 
     if ( $opt->{check} eq 'message' ) {
-        die "git-lint: file is required if check is message\n"
+        die "file is required if check is message\n"
             unless defined $opt->{file};
     }
 
-    die 'git-lint: profile ' . $opt->{profile} . ' was not found' . "\n"
+    die 'profile ' . $opt->{profile} . ' was not found' . "\n"
         unless exists $self->config->{profiles}{ $opt->{check} }{ $opt->{profile} };
 
     my $check = lc $opt->{check};
@@ -61,7 +61,7 @@ sub run {
         }
         catch {
             my $exception = $_;
-            die "git-lint: $exception\n";
+            die "$exception\n";
         };
         my $plugin = $class->new();
 
@@ -212,6 +212,15 @@ Message check profiles can also be defined.
 
 An example configuration is provided in the C<examples> directory of this project.
 
+Configuration is required.  If no configuration exists, an error will be printed to STDERR, but the action allowed to complete.
+
+ blaine@base ~/git/test (master *) $ git add test
+ blaine@base ~/git/test (master +) $ git commit
+ git-lint: [error] configuration setup is required. see the documentation for instructions.
+ [master 894b6d0] test
+  1 file changed, 1 insertion(+), 1 deletion(-)
+ blaine@base ~/git/test (master) $
+
 =head1 ENABLING CHECKS FOR REPOS
 
 To enable as a C<pre-commit> hook, copy the C<pre-commit> script from the C<example/hooks> directory into the C<.git/hooks> directory of the repo you want to check.
@@ -219,16 +228,6 @@ To enable as a C<pre-commit> hook, copy the C<pre-commit> script from the C<exam
 Once copied, update the path and options to match your path and preferred profile.
 
 To enable as a C<commit-msg> hook, copy the C<commit-msg> script from the C<example/hooks> directory into the C<.git/hooks> directory of the repo you want to check.
-
-=head1 KNOWN CAVEATS
-
-Since the default commit check profile runs all commit checks by default, an unchanged default profile will not allow the user to add a commit since they'll get a warning for either indent tabs or indent spaces.  To work around this, create a new profile, or override the de
-fault profile, to use the one being used for the project.
-
- [lint "profiles.commit"]
-     default = Whitespace, IndentSpaces
-
-Both the IndentTabs and IndentSpaces commit checks overlap with the MixedIndentTabsSpaces check.  A user may find two warnings given if mixed indent tabs and spaces are found; one for the tab (or space) indent and one for the mixed indent tab (or space).
 
 =head1 COPYRIGHT AND LICENSE
 

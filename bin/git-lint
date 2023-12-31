@@ -8,6 +8,7 @@ use lib "$FindBin::RealBin/../lib";
 
 use Getopt::Long ();
 use Pod::Usage   ();
+use Try::Tiny    ();
 use Git::Lint;
 
 my $VERSION = '0.018';
@@ -34,8 +35,21 @@ if ( $opt{check} eq 'message' ) {
 delete $opt{version};
 delete $opt{help};
 
-my $lint = Git::Lint->new();
-$lint->run(\%opt);
+my $lint = Try::Tiny::try {
+    return Git::Lint->new();
+}
+Try::Tiny::catch {
+    print STDERR "git-lint: [error] $_";
+    exit 0;
+};
+
+Try::Tiny::try {
+    $lint->run(\%opt);
+}
+Try::Tiny::catch {
+    print STDERR "git-lint: [error] $_";
+    exit 0;
+};
 
 if ( $lint->{issues} ) {
     if ($opt{check} eq 'commit') {
@@ -147,6 +161,15 @@ Message check profiles can also be defined.
      summary = SummaryEndingPeriod, SummaryLength
 
 An example configuration is provided in the C<examples> directory of this project.
+
+Configuration is required.  If no configuration exists, an error will be printed to STDERR, but the action allowed to complete.
+
+ blaine@base ~/git/test (master *) $ git add test
+ blaine@base ~/git/test (master +) $ git commit
+ git-lint: [error] configuration setup is required. see the documentation for instructions.
+ [master 894b6d0] test
+  1 file changed, 1 insertion(+), 1 deletion(-)
+ blaine@base ~/git/test (master) $
 
 =head1 ENABLING CHECKS FOR REPOS
 

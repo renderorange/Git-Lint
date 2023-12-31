@@ -111,6 +111,15 @@ Message check profiles can also be defined.
 
 An example configuration is provided in the `examples` directory of this project.
 
+Configuration is required.  If no configuration exists, an error will be printed to STDERR, but the action allowed to complete.
+
+    blaine@base ~/git/test (master *) $ git add test
+    blaine@base ~/git/test (master +) $ git commit
+    git-lint: [error] configuration setup is required. see the documentation for instructions.
+    [master 894b6d0] test
+     1 file changed, 1 insertion(+), 1 deletion(-)
+    blaine@base ~/git/test (master) $
+
 # ENABLING CHECKS FOR REPOS
 
 To enable as a `pre-commit` hook, copy the `pre-commit` script from the `example/hooks` directory into the `.git/hooks` directory of the repo you want to check.
@@ -118,15 +127,6 @@ To enable as a `pre-commit` hook, copy the `pre-commit` script from the `example
 Once copied, update the path and options to match your path and preferred profile.
 
 To enable as a `commit-msg` hook, copy the `commit-msg` script from the `example/hooks` directory into the `.git/hooks` directory of the repo you want to check.
-
-# KNOWN CAVEATS
-
-Since the default commit check profile runs all commit checks by default, an unchanged default profile will not allow the user to add a commit since they'll get a warning for either indent tabs or indent spaces.  To work around this, create a new profile, or override the default profile, to use the one being used for the project.
-
-    [lint "profiles.commit"]
-        default = Whitespace, IndentSpaces
-
-Both the IndentTabs and IndentSpaces commit checks overlap with the MixedIndentTabsSpaces check.  A user may find two warnings given if mixed indent tabs and spaces are found; one for the tab (or space) indent and one for the mixed indent tab (or space).
 
 # COPYRIGHT AND LICENSE
 
