@@ -120,6 +120,36 @@ Configuration is required.  If no configuration exists, an error will be printed
      1 file changed, 1 insertion(+), 1 deletion(-)
     blaine@base ~/git/test (master) $
 
+# ADDING NEW CHECK MODULES
+
+`git-lint` can be configured to load check modules from a local directory using the `localdir` configuration setting.
+
+To load modules from a local directory, add the lint `config` setting, with `localdir` key and directory location to the git config file.
+
+    [lint "config"]
+        localdir = /home/blaine/tmp/git-lint/lib
+
+In this example, we're adding a new commit check, `Flipdoozler`.  Create the local directory and path for the new module.
+
+    $ mkdir -p /home/blaine/tmp/git-lint/lib/Git/Lint/Check/Commit
+
+Then add the new check module.
+
+    $ vi /home/blaine/tmp/git-lint/lib/Git/Lint/Check/Commit/Flipdoozler.pm
+    package Git::Lint::Check::Commit::Flipdoozler;
+    ...
+
+Update the commit check profile to use the new module.
+
+    [lint "profiles.commit"]
+        default = Whitespace, IndentTabs, MixedIndentTabsSpaces, Flipdoozler
+
+`git-lint` will now warn for the check contained in Flipdoozler.
+
+    blaine@base ~/git/test (master +) $ git commit
+    git-lint: [commit] test - Flipdoozler (line 18)
+    blaine@base ~/git/test (master +) $
+
 # ENABLING CHECKS FOR REPOS
 
 To enable as a `pre-commit` hook, copy the `pre-commit` script from the `example/hooks` directory into the `.git/hooks` directory of the repo you want to check.
